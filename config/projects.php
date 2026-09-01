@@ -48,7 +48,7 @@ return [
         'stack' => ['Next.js', 'Bootstrap', 'Framer Motion'],
         'github' => 'https://github.com/username/portfolio-theme',
         'live' => 'https://portfolio-theme.vercel.app',
-        'featured' => false,
+        'featured' => true,
         'year' => '2025',
         'features' => [
             'Desain responsif mobile-first',

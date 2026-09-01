@@ -9,7 +9,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $projects = collect(config('projects'));
+        // Carousel home: maksimal 3 projek utama (featured)
+        $projects = collect(config('projects'))->where('featured', true)->take(3)->values();
         $services = config('portfolio.services');
         $posts = collect(config('posts'))->sortByDesc('date')->take(3);
         $technologies = config('portfolio.technologies');

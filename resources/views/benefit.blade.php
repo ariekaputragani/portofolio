@@ -3,31 +3,46 @@
 @php $siteImages = ['gambar4.jpg', 'akomodasi.jpg', '24-7-service.jpg', 'about-bg.jpg']; @endphp
 
 @section('content')
-@include('layouts.banner')
-<div class="bg-krem p-5 app-serif">
-	<div class="container pt-3">
-		<div class="row mb-3">
-			<h1 class="benefit wow fadeInLeft" data-wow-delay="0.2s">Layanan</h1>
-			<hr>
-		</div>
-		@foreach($services as $index => $service)
-			<div class="row {{ $loop->last ? 'mt-3' : 'my-3' }}">
-				<div class="col-3">
-					<img src="{{ asset('images/' . $siteImages[$index % count($siteImages)]) }}" alt="{{ $service['title'] }}" class="img-thumbnail img-1 wow fadeInLeft" data-wow-delay="0.7s">
-				</div>
-				<div class="col-xl-7 col-9">
-					<div class="d-flex benefit">
-						<h3 class="wow fadeInUp" data-wow-delay="0.8s"><i class="{{ $service['icon'] }} mr-10"></i></h3><h3 class="wow fadeInRight" data-wow-delay="0.9s">{{ $service['title'] }}</h3>
-					</div>
-					<p class="benefit wow fadeInRight" data-wow-delay="1s">{{ $service['description'] }}</p>
-					<ul class="benefit wow fadeInRight" data-wow-delay="1.1s">
-						@foreach($service['points'] as $point)
-							<li><i class="fa-solid fa-circle-check text-primary me-2"></i>{{ $point }}</li>
-						@endforeach
-					</ul>
-				</div>
+<div class="pf-scope pf-hero-bg py-5">
+	<div class="container py-4">
+		<div class="hero-card-frame p-4 p-lg-5">
+			<div class="mb-5">
+				<p class="section-eyebrow mb-2" data-t="layanan.eyebrow">LAYANAN</p>
+				<h1 class="hero-title text-gradient mb-3" data-t="layanan.title">Layanan Digital</h1>
+				<p class="text-secondary fs-5 mb-0" data-t="layanan.subtitle">Layanan yang saling melengkapi untuk mendukung kebutuhan digital Anda.</p>
 			</div>
-		@endforeach
+
+			<div class="d-flex flex-column gap-4">
+				@foreach($services as $index => $service)
+					<div class="card card-hover p-4 border-0">
+						<div class="row align-items-center gy-4">
+							<div class="col-md-3 text-center text-md-start">
+								<div class="card-img-wrapper rounded-3 overflow-hidden" style="height: 180px;">
+									<img src="{{ asset('images/' . $siteImages[$index % count($siteImages)]) }}" alt="{{ $service['title'] }}" class="w-100 h-100 object-fit-cover" style="width:100%;height:100%;object-fit:cover;">
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="d-flex align-items-center gap-3 mb-2">
+									<div class="icon-circle-hero flex-shrink-0" style="width:48px;height:48px;font-size:1.3rem;">
+										<i class="{{ $service['icon'] }}"></i>
+									</div>
+									<h3 class="fw-bold text-white mb-0">{{ $service['title'] }}</h3>
+								</div>
+								<p class="text-secondary mb-3 fs-6">{{ $service['description'] }}</p>
+								<ul class="list-unstyled d-flex flex-wrap gap-3 mb-0">
+									@foreach($service['points'] as $point)
+										<li class="d-flex align-items-center gap-2 text-secondary">
+											<i class="fa-solid fa-circle-check text-primary"></i>
+											<span>{{ $point }}</span>
+										</li>
+									@endforeach
+								</ul>
+							</div>
+						</div>
+					</div>
+				@endforeach
+			</div>
+		</div>
 	</div>
 </div>
 @endsection

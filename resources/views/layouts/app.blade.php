@@ -12,8 +12,10 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -23,16 +25,14 @@
 	<link href="/css/owl.carousel.css" rel="stylesheet">
 	<link href="/css/select2.min.css" rel="stylesheet">
 	<link href="/css/sweetalert2.min.css" rel="stylesheet">
-	<link href="/css/style.css" rel="stylesheet">
-	<link href="/css/portfolio.css" rel="stylesheet">
+	<link href="/css/style.css?v=13" rel="stylesheet">
+	<link href="/css/portfolio.css?v=98" rel="stylesheet">
 </head>
 <body id="top" data-spy="scroll">
     <div id="app">
 		<section class="preloader">
-			<div class="spinner">
-
-				<span class="spinner-rotate"></span>
-
+			<div class="spinner-grow text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
 			</div>
 		</section>
 		@include('layouts.navigation')
@@ -52,5 +52,8 @@
 	<script src="/js/script.js"></script>
 	<script>window.PORTFOLIO_TRANSLATIONS = @json(config('portfolio.translations'));</script>
 	<script src="/js/translate.js"></script>
+	<script src="/js/reveal.js"></script>
+	<script src="/js/typewriter.js"></script>
+	<script src="/js/carousel-fx.js?v=400"></script>
 </body>
 </html>

@@ -15,6 +15,16 @@ class MessageRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'phone' => (string) ($this->phone ?? ''),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -22,10 +32,10 @@ class MessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:3'],
-            'email' => ['required', 'email'],
+            'name' => ['required', 'string', 'min:3', 'max:50'],
+            'email' => ['required', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'message' => ['required', 'string'],
+            'message' => ['required', 'string', 'max:2000'],
         ];
     }
 }

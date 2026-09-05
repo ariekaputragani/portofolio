@@ -5,7 +5,7 @@ services:
     container_name: portofolio-app
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-80}:80"          # Map host APP_PORT -> 80 container
+      - "${APP_PORT:-8080}:80"          # Map host APP_PORT -> 80 container
     environment:
       APP_NAME: ${APP_NAME:-Portofolio}
       APP_ENV: ${APP_ENV:-production}

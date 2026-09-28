@@ -1719,6 +1719,11 @@
     gap: 3.5rem !important;
   }
 
+  /* Shift 6 menu buttons in mobile collapse navbar slightly to the left to align vertically with controls below */
+  .sh-nav-capsule {
+    transform: translateX(-1.25rem) !important;
+  }
+
   .sh-nav-item,
   #navControls .lang-btn,
   #navControls .sh-btn-contact {

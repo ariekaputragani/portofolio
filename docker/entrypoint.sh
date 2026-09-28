@@ -26,9 +26,8 @@ if [ "${DB_SEED:-false}" = "true" ]; then
 fi
 
 echo "[entrypoint] optimize cache config/route..."
-php artisan config:clear --ansi >/dev/null 2>&1 || true
-php artisan route:clear --ansi >/dev/null 2>&1 || true
-php artisan view:clear --ansi >/dev/null 2>&1 || true
+php artisan optimize --no-interaction || true
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
 
 echo "[entrypoint] starting $@"
 exec "$@"

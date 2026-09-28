@@ -19,4 +19,6 @@ Route::get('blog', [PortfolioController::class, 'blog'])->name('blog');
 Route::get('blog/{slug}', [PortfolioController::class, 'blogShow'])->name('blog.show');
 
 Route::get('kontak', [PortfolioController::class, 'contact'])->name('kontak');
-Route::post('messages/store', [MessageController::class, 'store'])->name('messages.store');
+Route::post('messages/store', [MessageController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('messages.store');

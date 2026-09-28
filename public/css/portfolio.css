@@ -1705,10 +1705,11 @@
   .sh-nav-capsule,
   #navControls {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
+    min-width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     background: transparent !important;
@@ -1717,11 +1718,6 @@
     border: none !important;
     box-shadow: none !important;
     gap: 3.5rem !important;
-  }
-
-  /* Shift 6 menu buttons in mobile collapse navbar slightly to the left to align vertically with controls below */
-  .sh-nav-capsule {
-    transform: translateX(-1.25rem) !important;
   }
 
   .sh-nav-item,

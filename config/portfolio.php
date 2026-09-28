@@ -36,12 +36,12 @@ return [
         'instagram' => env('PORTFOLIO_INSTAGRAM', 'https://instagram.com/username'),
     ],
     'nav' => [
-        ['label' => 'Beranda', 'href' => '/'],
-        ['label' => 'Tentang', 'href' => '/tentang'],
-        ['label' => 'Proyek', 'href' => '/proyek'],
-        ['label' => 'Layanan', 'href' => '/layanan'],
-        ['label' => 'Blog', 'href' => '/blog'],
-        ['label' => 'Kontak', 'href' => '/kontak'],
+        ['label' => 'Beranda', 'href' => '/', 'icon' => 'fa-solid fa-house'],
+        ['label' => 'Tentang', 'href' => '/tentang', 'icon' => 'fa-solid fa-user'],
+        ['label' => 'Proyek', 'href' => '/proyek', 'icon' => 'fa-solid fa-code'],
+        ['label' => 'Layanan', 'href' => '/layanan', 'icon' => 'fa-solid fa-cubes'],
+        ['label' => 'Blog', 'href' => '/blog', 'icon' => 'fa-solid fa-newspaper'],
+        ['label' => 'Kontak', 'href' => '/kontak', 'icon' => 'fa-solid fa-envelope'],
     ],
     'highlights' => [
         'Pengalaman 3+ tahun di bidang pengembangan web',

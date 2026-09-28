@@ -59,10 +59,7 @@
   position: relative;
   z-index: 10;
   overflow: visible;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(25, 135, 84, 0.12), transparent 42%),
-    radial-gradient(circle at 88% 85%, rgba(11, 94, 215, 0.12), transparent 42%),
-    linear-gradient(180deg, var(--bg-soft), var(--bs-body-bg));
+  background: transparent;
   color: var(--bs-body-color);
 }
 
@@ -203,8 +200,8 @@
 .avatar-frame-container {
   position: relative;
   display: inline-block;
-  width: 192px;
-  height: 192px;
+  width: 320px;
+  height: 320px;
   max-width: 100%;
   aspect-ratio: 1 / 1;
   margin: 0 auto;
@@ -224,8 +221,8 @@
 }
 
 .avatar-frame-container .avatar-img {
-  width: 192px;
-  height: 192px;
+  width: 320px;
+  height: 320px;
   max-width: 100%;
   object-fit: cover;
   border-radius: 4px;
@@ -676,195 +673,6 @@
   }
 }
 
-/* ===== Efek klik tombol Detail â€” REKONSTRUKSI 1:1 VIDEO
-   "Minecraft Subscribe button green screen [ORIGINAL] - Napan"
-   (dipicu public/js/carousel-fx.js):
-   tombol merah YouTube naik dari bawah -> tangan pixel menekan ->
-   berubah abu-abu SUBSCRIBED + asap poof -> item Minecraft
-   (iron, golden apple, diamond x2, coal) terbang melengkung. ===== */
-.mc-sub-fx {
-  position: fixed;
-  inset: 0;
-  z-index: 4000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.mc-stage {
-  position: relative;
-}
-
-/* --- Tombol YouTube: merah SUBSCRIBE <-> abu-abu SUBSCRIBED --- */
-.mc-yt-btn {
-  position: relative;
-  z-index: 2;
-  min-width: 340px;
-  padding: 22px 48px;
-  border-radius: 999px;
-  text-align: center;
-  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-  font-size: clamp(22px, 3vw, 34px);
-  font-weight: 600;
-  letter-spacing: 1px;
-  transform-origin: center bottom;
-  animation: mc-rise-up 0.5s cubic-bezier(0.2, 0.85, 0.25, 1) both;
-}
-
-.mc-yt-btn.is-red {
-  background: #ff0000;
-  color: #ffffff;
-}
-
-.mc-yt-btn.is-clicked {
-  background: #f2f2f2;
-  color: #606060;
-  animation: mc-morph 0.28s ease-out both;
-}
-
-@keyframes mc-rise-up {
-  0% {
-    transform: translateY(120vh);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-@keyframes mc-morph {
-  0% {
-    transform: scale(0.94);
-  }
-
-  55% {
-    transform: scale(1.05);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* --- Tangan pixel Minecraft meluncur lalu MENEKAN tombol --- */
-.mc-cursor-wrap {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 6;
-  pointer-events: none;
-  filter: drop-shadow(5px 7px 0 rgba(0, 0, 0, 0.25));
-  opacity: 0;
-  animation: mc-hand-run 0.34s linear 0.3s forwards;
-}
-
-@keyframes mc-hand-run {
-  0% {
-    transform: translate(320px, 280px) rotate(12deg);
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  80% {
-    transform: translate(8px, 53px) rotate(0deg);
-  }
-
-  90% {
-    transform: translate(18px, 70px) scale(0.93);
-  }
-
-  /* TEKAN! */
-  100% {
-    transform: translate(8px, 53px) rotate(0deg);
-    opacity: 1;
-  }
-}
-
-/* --- Asap poof ala Minecraft saat tombol berubah --- */
-.mc-poof {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--sz, 16px);
-  height: var(--sz, 16px);
-  border-radius: 50%;
-  z-index: 4;
-  animation: mc-poof-fly 0.5s ease-out both;
-}
-
-@keyframes mc-poof-fly {
-  0% {
-    transform: translate(-50%, -50%) scale(0.4);
-    opacity: 0.95;
-  }
-
-  100% {
-    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2);
-    opacity: 0;
-  }
-}
-
-/* --- Item Minecraft terbang melengkung keluar --- */
-.mc-item-wrap {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 3;
-  pointer-events: none;
-  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.15));
-  animation: mc-item-fly 0.95s cubic-bezier(0.25, 0.4, 0.6, 1) both;
-}
-
-@keyframes mc-item-fly {
-  0% {
-    transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
-    opacity: 0;
-  }
-
-  18% {
-    transform: translate(calc(-50% + var(--tx) * 0.35), calc(-50% + var(--ty) * 1.5)) scale(1.08) rotate(calc(var(--rot) * 0.4));
-    opacity: 1;
-  }
-
-  55% {
-    transform: translate(calc(-50% + var(--tx) * 0.75), calc(-50% + var(--ty) * 0.9)) scale(1) rotate(calc(var(--rot) * 0.75));
-    opacity: 1;
-  }
-
-  100% {
-    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.85) rotate(var(--rot));
-    opacity: 0;
-  }
-}
-
-/* Fase keluar seluruh scene. */
-.mc-sub-fx.mc-sub-out {
-  opacity: 0;
-}
-
-/* Denyut mikro pada tombol Detail yang diklik. */
-@keyframes mc-press {
-  0% {
-    transform: scale(1);
-  }
-
-  40% {
-    transform: scale(0.9);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-#demo .mc-pressed {
-  animation: mc-press 0.32s ease !important;
-}
 
 /* ===== Sections ===== */
 .pf-scope .section-tint {
@@ -1019,10 +827,7 @@
   position: relative;
   overflow: hidden;
   padding: 4rem 0 5rem;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(25, 135, 84, 0.18), transparent 42%),
-    radial-gradient(circle at 88% 85%, rgba(11, 94, 215, 0.18), transparent 42%),
-    linear-gradient(180deg, var(--bg-soft, #141a21), var(--bs-body-bg, #0d1117));
+  background: transparent;
   color: var(--bs-body-color, #e6e9ee);
 }
 
@@ -1554,11 +1359,6 @@
   }
 }
 
-/* ===== Navbar (100% match portfolio-web/src/app/globals.css, di-scope khusus .navbar) ===== */
-
-/* ===== Navbar: tombol, gradien & animasi = 100% ../portfolio (hospital theme),
-   di-scope khusus .navbar. TINGGI BAR dikunci = ../portfolio-web (56px). ===== */
-
 .navbar {
   --brand-green: #3ddc84;
   --brand-blue: #6fa8ff;
@@ -1566,15 +1366,16 @@
   /* Background navbar = 100% ../portfolio (app.css [data-bs-theme="dark"]):
      rgba(13, 17, 23, 0.8) + backdrop blur 10px â€” berlaku untuk state 2
      (desktop scrolled) dan SEMUA state mobile. */
+  /* --navbar-bg: rgba(255, 255, 255, 0.07); */
+  /* --navbar-bg: rgba(13, 17, 23, 0.8); */
+  /* --navbar-bg: rgba(32, 178, 170, 0.08); */
   --navbar-bg: rgba(32, 178, 170, 0.8);
-  --border-soft: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.15);
 
-  background-color: var(--navbar-bg);
-  border-bottom: 1px solid var(--border-soft);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  /* Kunci tinggi bar seperti ../portfolio-web */
-  --bs-navbar-padding-y: 0.5rem;
+  background: transparent;
+  border-bottom: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   /* FADE mulus saat pergantian state scroll (top <-> scrolled), dua arah,
      berlaku di Desktop & Mobile: background navbar ../portfolio
      rgba(13, 17, 23, 0.8) <-> transparan (desktop paling atas). */
@@ -1582,38 +1383,10 @@
     border-color 0.35s ease,
     backdrop-filter 0.35s ease,
     -webkit-backdrop-filter 0.35s ease;
+  z-index: 1050;
 }
 
-
-
-.navbar .navbar-brand {
-  font-weight: 800;
-  font-family: var(--bs-font-sans-serif);
-  /* Logo 36px tidak boleh menambah tinggi bar:
-     brand = 40px (sama dengan nav-link) sehingga total tetap 56px */
-  padding-top: 0.125rem;
-  padding-bottom: 0.125rem;
-}
-
-.navbar .brand-logo {
-  border: 2px solid var(--brand-yellow);
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.navbar .text-gradient {
-  background: linear-gradient(120deg,
-      var(--brand-green, #198754),
-      var(--brand-blue, #0b5ed7),
-      var(--brand-yellow, #ffca2c));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-.navbar .nav-link,
-.navbar-expand-lg .navbar-nav .nav-link {
+.navbar .nav-link {
   color: #e6e9ee;
   font-weight: 600;
   position: relative;
@@ -1635,9 +1408,7 @@
 }
 
 .navbar .nav-link:hover,
-.navbar .nav-link.active,
-.navbar-expand-lg .navbar-nav .nav-link:hover,
-.navbar-expand-lg .navbar-nav .nav-link.active {
+.navbar .nav-link.active {
   color: var(--brand-green);
 }
 
@@ -1673,23 +1444,445 @@
   border-radius: 999px;
 }
 
-/* Animasi pergerakan meluncur (glide) tombol & elemen navbar sesuai trajektori Gambar 1 */
-/* PADDING SENGAJA TANPA transition: padding di-update JS setiap frame scroll
-   (48px -> 6px proporsional mengikuti scrollbar, setProperty important).
-   Transition waktu hanya membuat padding tertinggal dari posisi scroll. */
-.navbar #navContainer {
-  transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.sh-nav-capsule {
+  background: var(--navbar-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 9999px;
+  padding: 0.35rem 0.45rem;
 }
 
-.navbar .navbar-nav,
-.navbar #navControls {
-  /* GAP SENGAJA TANPA transition: nilai gap di-update JS setiap frame scroll
-     (48px -> 8px proporsional mengikuti scrollbar). Transition waktu justru
-     membuat gap tertinggal dari posisi scroll (terlihat masih gap 5 padahal
-     sudah scroll) â€” kenyamanan & estetika mengutamakan tracking 1:1. */
-  transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.sh-nav-item {
+  color: #e5e7eb !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.45rem 1.35rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  text-decoration: none;
+  /* transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; */
+  transition: all 0.1s ease;
+  display: inline-block;
+}
+
+.sh-nav-item:hover {
+  outline: none;
+  border-color: #fff;
+}
+
+.sh-nav-item.active {
+  background: #252830;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.sh-btn-circle {
+  font-size: 1.25rem;
+  border-radius: 50%;
+  background: var(--navbar-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: none;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease;
+  cursor: pointer;
+  padding: 0.9375rem 1rem;
+  position: relative;
+  z-index: 1100 !important;
+  pointer-events: auto !important;
+}
+
+.sh-btn-circle:hover {
+  background: rgba(32, 178, 170, 0.15);
+  color: #25e28a;
+}
+
+.lang-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Animated 3-Line Hamburger Toggle Button (Kurosub style line morphing) */
+.sh-hamburger {
+  position: relative;
+  width: 1.35rem;
+  height: 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sh-hamburger-line {
+  position: absolute;
+  width: 1.35rem;
+  height: 0.135rem;
+  background-color: currentColor;
+  border-radius: 999px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  left: 50%;
+  top: 50%;
+  margin-left: -0.675rem;
+  margin-top: -0.0675rem;
+}
+
+.sh-hamburger-line.line-1 {
+  transform: translateY(-6px);
+}
+
+.sh-hamburger-line.line-2 {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.sh-hamburger-line.line-3 {
+  transform: translateY(6px);
+}
+
+/* Active / Expanded State (Menu Open: 3 lines morph into large X) */
+.sh-btn-circle[aria-expanded="true"] .sh-hamburger,
+.sh-btn-circle:not(.collapsed) .sh-hamburger,
+.menu-open .sh-btn-circle .sh-hamburger {
+  transform: scale(2);
+}
+
+.sh-btn-circle[aria-expanded="true"] .sh-hamburger-line.line-1,
+.sh-btn-circle:not(.collapsed) .sh-hamburger-line.line-1,
+.menu-open .sh-btn-circle .sh-hamburger-line.line-1 {
+  transform: translateY(0) rotate(45deg);
+}
+
+.sh-btn-circle[aria-expanded="true"] .sh-hamburger-line.line-2,
+.sh-btn-circle:not(.collapsed) .sh-hamburger-line.line-2,
+.menu-open .sh-btn-circle .sh-hamburger-line.line-2 {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.sh-btn-circle[aria-expanded="true"] .sh-hamburger-line.line-3,
+.sh-btn-circle:not(.collapsed) .sh-hamburger-line.line-3,
+.menu-open .sh-btn-circle .sh-hamburger-line.line-3 {
+  transform: translateY(0) rotate(-45deg);
+}
+
+/* Tombol collapse transparan & tanpa border/shadow/outline saat menu open */
+.sh-btn-circle[aria-expanded="true"],
+.menu-open .sh-btn-circle,
+.navbar:has(.navbar-collapse.show) .sh-btn-circle,
+.navbar:has(.navbar-collapse.collapsing) .sh-btn-circle {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.sh-btn-circle:focus,
+.sh-btn-circle:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sh-btn-contact {
+  background: linear-gradient(135deg, #25e28a 0%, #1fd680 100%);
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37, 226, 138, 0.3);
+  transition: all 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.sh-btn-contact:hover {
+  background: #000;
+  box-shadow: 0 4px 25px rgba(37, 226, 138, 0.45);
+  color: rgb(37, 226, 138);
+}
+
+@media (max-width: 991.98px) {
+  .navbar {
+    padding-top: 1rem !important;
+  }
+
+  .navbar-collapse {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 1090 !important;
+    background: var(--navbar-bg) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    padding: 1.5rem 1.5rem 2rem !important;
+    display: none;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow-y: auto !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .navbar-collapse.collapsing {
+    display: flex !important;
+    opacity: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+    transition: opacity 0.35s ease !important;
+  }
+
+  .navbar-collapse.show {
+    display: flex !important;
+    opacity: 1 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+    transition: opacity 0.35s ease !important;
+  }
+
+  /* Header inside full screen overlay (Top Right X button - exact same position as collapse button) */
+  .mobile-overlay-header {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding-top: 0.25rem;
+  }
+
+  .sh-btn-close-mobile {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    padding: 0 !important;
+    width: 44px;
+    height: 44px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
+  .close-icon-lg {
+    font-size: 2.5rem !important;
+    /* Tanda silang dibuat besar di atas kanan */
+    color: #ffffff !important;
+    line-height: 1;
+  }
+
+  /* Group Wrapper for Mobile Menu & Controls */
+  .sh-nav-group-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    margin: auto !important;
+    padding: 0 !important;
+    gap: 3.5rem !important;
+  }
+
+  /* Main Navigation Menu Capsule & Controls (2 Kolom Grid Layout, gap 6rem) */
+  .sh-nav-capsule,
+  #navControls {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    gap: 3.5rem !important;
+  }
+
+  .sh-nav-item,
+  #navControls .lang-btn,
+  #navControls .sh-btn-contact {
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0.75rem 0.5rem !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 16px !important;
+    color: #ffffff !important;
+    background: transparent !important;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease !important;
+  }
+
+  .sh-nav-item .sh-nav-icon,
+  .sh-nav-item .nav-icon,
+  .sh-nav-item i,
+  #navControls .lang-btn .sh-nav-icon,
+  #navControls .lang-btn .lang-icon,
+  #navControls .lang-btn i,
+  #navControls .sh-btn-contact .sh-nav-icon,
+  #navControls .sh-btn-contact .contact-icon,
+  #navControls .sh-btn-contact i {
+    font-size: 4rem !important;
+    /* Icon di atas besar sesuai gambar */
+    margin-right: 0 !important;
+    margin-bottom: 0.35rem !important;
+    color: #ffffff !important;
+    transition: transform 0.2s ease, color 0.2s ease !important;
+  }
+
+  .sh-nav-item span,
+  #navControls .lang-btn span,
+  #navControls .lang-btn .lang-label,
+  #navControls .sh-btn-contact span {
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    transition: color 0.2s ease !important;
+  }
+
+  .sh-nav-item:hover,
+  .sh-nav-item.active,
+  #navControls .lang-btn:hover,
+  #navControls .sh-btn-contact:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--brand-green, #3ddc84) !important;
+  }
+
+  .sh-nav-item:hover span,
+  .sh-nav-item:hover .sh-nav-icon,
+  .sh-nav-item:hover .nav-icon,
+  .sh-nav-item:hover i,
+  .sh-nav-item.active span,
+  .sh-nav-item.active .sh-nav-icon,
+  .sh-nav-item.active .nav-icon,
+  .sh-nav-item.active i,
+  #navControls .lang-btn:hover span,
+  #navControls .lang-btn:hover .lang-label,
+  #navControls .lang-btn:hover .sh-nav-icon,
+  #navControls .lang-btn:hover .lang-icon,
+  #navControls .lang-btn:hover i,
+  #navControls .sh-btn-contact:hover span,
+  #navControls .sh-btn-contact:hover .sh-nav-icon,
+  #navControls .sh-btn-contact:hover .contact-icon,
+  #navControls .sh-btn-contact:hover i {
+    color: var(--brand-green, #3ddc84) !important;
+    transform: scale(1.1);
+  }
+
+  .sh-btn-circle {
+    padding: 1.075rem 1.1375rem;
+  }
+}
+
+/* Transisi CSS halus untuk semua elemen navbar tanpa kelas Bootstrap kaku (kuroxsub.my.id style) */
+.navbar,
+.navbar #navContainer,
+.sh-nav-capsule,
+.sh-nav-item,
+.sh-btn-circle,
+.sh-btn-contact,
+#navbarMenu,
+#navControls {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* State 1: Paling Atas (Desktop: scroll <= 4.5rem) */
+@media (min-width: 992px) {
+  .sh-nav-group-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .sh-nav-item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .sh-nav-item .nav-icon {
+    font-size: 0.95rem;
+    margin-right: 0.45rem;
+  }
+
+  .sh-btn-contact .contact-icon {
+    margin-right: 0.45rem;
+  }
+
+  .lang-btn .lang-icon {
+    margin-right: 0.35rem;
+  }
+
+  .navbar:not(.navbar-scrolled) {
+    padding-top: 1rem !important;
+  }
+
+  .navbar:not(.navbar-scrolled) .sh-nav-capsule {
+    padding: 0.5625rem 0.6625rem;
+  }
+
+  .navbar:not(.navbar-scrolled) .sh-nav-item {
+    padding: 0.375rem 1.275rem;
+    font-size: 1rem;
+  }
+
+  .navbar:not(.navbar-scrolled) #navControls {
+    gap: 1rem !important;
+  }
+
+  .navbar:not(.navbar-scrolled) .sh-btn-circle {
+    padding: 1.075rem 1.1375rem;
+    font-size: 1.35rem;
+  }
+
+  .navbar:not(.navbar-scrolled) .lang-label {
+    font-size: 0.9rem;
+  }
+
+  .navbar:not(.navbar-scrolled) .tele {
+    margin-right: 0.5rem !important;
+  }
+
+  .navbar:not(.navbar-scrolled) .sh-btn-contact {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+.navbar .nav-link,
+.navbar .btn {
+  transition: color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ===== Hero-Style Section Extensions ===== */
@@ -1758,12 +1951,4 @@
 
 .pf-scope .card:hover .card-img-wrapper img {
   transform: scale(1.05);
-}
-
-.navbar .nav-link,
-.navbar .btn {
-  transition: color 0.3s ease,
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }

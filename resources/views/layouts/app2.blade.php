@@ -47,5 +47,6 @@
 	<script src="/js/sweetalert2.all.min.js"></script>
 	<script src="/js/script.js"></script>
 	<script src="/js/translate.js"></script>
+	<script src="/js/cursor-glow.js"></script>
 </body>
 </html>

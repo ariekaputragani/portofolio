@@ -1,9 +1,9 @@
-/* Translator Indonesia / English toggle */
-(function () {
+/* Translator Indonesia / English toggle (jQuery) */
+(function ($) {
   "use strict";
 
   var translations = window.PORTFOLIO_TRANSLATIONS || { en: {} };
-  var DEFAULT_LANG = document.documentElement.lang === "en" ? "en" : "id";
+  var DEFAULT_LANG = $("html").attr("lang") === "en" ? "en" : "id";
 
   function currentLang() {
     try {
@@ -15,37 +15,31 @@
 
   function applyLang(lang) {
     var dict = translations[lang] || {};
-    document.querySelectorAll("[data-t]").forEach(function (el) {
-      var key = el.getAttribute("data-t");
+    $("[data-t]").each(function () {
+      var key = $(this).attr("data-t");
       if (dict[key]) {
-        el.textContent = dict[key];
+        $(this).text(dict[key]);
       }
     });
-    var label = document.getElementById("lang-label");
-    if (label) {
-      label.textContent = lang === "id" ? "EN" : "ID";
+    var $label = $("#lang-label");
+    if ($label.length) {
+      $label.text(lang === "id" ? "EN" : "ID");
     }
-    document.documentElement.lang = lang;
+    $("html").attr("lang", lang);
   }
 
-  function init() {
+  $(function () {
     applyLang(currentLang());
 
-    var btn = document.getElementById("lang-toggle");
-    if (!btn) return;
+    var $btn = $("#lang-toggle");
+    if (!$btn.length) return;
 
-    btn.addEventListener("click", function () {
+    $btn.on("click", function () {
       var next = currentLang() === "id" ? "en" : "id";
       try {
         localStorage.setItem("portfolio_lang", next);
       } catch (e) {}
       applyLang(next);
     });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-})();
+  });
+})(jQuery);

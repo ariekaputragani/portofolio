@@ -26,7 +26,7 @@
 	<link href="/css/select2.min.css" rel="stylesheet">
 	<link href="/css/sweetalert2.min.css" rel="stylesheet">
 	<link href="/css/style.css?v=13" rel="stylesheet">
-	<link href="/css/portfolio.css?v=98" rel="stylesheet">
+	<link href="/css/portfolio.css?v=114" rel="stylesheet">
 </head>
 <body id="top" data-spy="scroll">
     <div id="app">
@@ -55,5 +55,6 @@
 	<script src="/js/reveal.js"></script>
 	<script src="/js/typewriter.js"></script>
 	<script src="/js/carousel-fx.js?v=400"></script>
+	<script src="/js/cursor-glow.js"></script>
 </body>
 </html>

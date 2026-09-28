@@ -1,78 +1,78 @@
-/* Scroll Reveal — port 1:1 dari resources/js/wow.js projek ../portfolio.
-   Memakai kelas .sr-reveal (bukan .wow) supaya WOW.js lama yang masih
-   dipakai section "Tech Pipeline" ke bawah tidak bentrok. */
-(function () {
+/* Scroll Reveal (jQuery) — port 1:1 dari resources/js/wow.js projek ../portfolio. */
+(function ($) {
     "use strict";
 
     var REVEAL_ENTER = "sr-reveal-enter";
 
-    var select = function () {
-        return Array.prototype.slice.call(document.querySelectorAll(".sr-reveal"));
-    };
-
-    var boxes = select();
-
-    var delayOf = function (element) {
-        var raw = element.getAttribute("data-wow-delay");
+    function delayOf($el) {
+        var raw = $el.attr("data-wow-delay");
         var seconds = parseFloat(raw);
         return isFinite(seconds) ? seconds * 1000 : 0;
-    };
-
-    var applyHidden = function (element) {
-        element.style.visibility = "visible";
-        element.classList.remove(REVEAL_ENTER);
-    };
-
-    var reveal = function (element) {
-        element.style.transitionDelay = delayOf(element) + "ms";
-        element.classList.add(REVEAL_ENTER);
-    };
-
-    var reset = function (element) {
-        element.style.transitionDelay = "0ms";
-        element.classList.remove(REVEAL_ENTER);
-    };
-
-    if ("IntersectionObserver" in window) {
-        var observer = new IntersectionObserver(
-            function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        reveal(entry.target);
-                    } else {
-                        reset(entry.target);
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        boxes.forEach(function (box) {
-            applyHidden(box);
-            observer.observe(box);
-        });
-
-        if (typeof MutationObserver !== "undefined") {
-            var mutationObserver = new MutationObserver(function () {
-                select().forEach(function (box) {
-                    if (boxes.indexOf(box) !== -1) return;
-                    boxes.push(box);
-                    applyHidden(box);
-                    observer.observe(box);
-                });
-            });
-            mutationObserver.observe(document.body, { childList: true, subtree: true });
-        }
-
-        window.addEventListener("beforeunload", function () {
-            observer.disconnect();
-            if (mutationObserver) mutationObserver.disconnect();
-        });
-    } else {
-        // Fallback browser lama: tampilkan semua tanpa animasi.
-        boxes.forEach(function (box) {
-            box.style.opacity = "1";
-            box.style.transform = "none";
-        });
     }
-})();
+
+    function applyHidden($el) {
+        $el.css("visibility", "visible").removeClass(REVEAL_ENTER);
+    }
+
+    function reveal($el) {
+        $el.css("transitionDelay", delayOf($el) + "ms").addClass(REVEAL_ENTER);
+    }
+
+    function reset($el) {
+        $el.css("transitionDelay", "0ms").removeClass(REVEAL_ENTER);
+    }
+
+    $(function () {
+        var $boxes = $(".sr-reveal");
+
+        if ("IntersectionObserver" in window) {
+            var observer = new IntersectionObserver(
+                function (entries) {
+                    entries.forEach(function (entry) {
+                        var $target = $(entry.target);
+                        if (entry.isIntersecting) {
+                            reveal($target);
+                        } else {
+                            reset($target);
+                        }
+                    });
+                },
+                { threshold: 0.1 }
+            );
+
+            $boxes.each(function () {
+                var $box = $(this);
+                applyHidden($box);
+                observer.observe(this);
+            });
+
+            if (typeof MutationObserver !== "undefined") {
+                var mutationObserver = new MutationObserver(function () {
+                    $(".sr-reveal").each(function () {
+                        var boxEl = this;
+                        var alreadyAdded = false;
+                        $boxes.each(function () {
+                            if (this === boxEl) {
+                                alreadyAdded = true;
+                                return false;
+                            }
+                        });
+                        if (!alreadyAdded) {
+                            $boxes = $boxes.add(boxEl);
+                            applyHidden($(boxEl));
+                            observer.observe(boxEl);
+                        }
+                    });
+                });
+                mutationObserver.observe(document.body, { childList: true, subtree: true });
+            }
+
+            $(window).on("beforeunload", function () {
+                observer.disconnect();
+                if (typeof mutationObserver !== "undefined") mutationObserver.disconnect();
+            });
+        } else {
+            $boxes.css({ opacity: "1", transform: "none" });
+        }
+    });
+})(jQuery);

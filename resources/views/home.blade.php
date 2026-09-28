@@ -12,70 +12,7 @@
 	<section class="hero pf-scope">
 		<div class="container">
 			<div class="row align-items-center gy-5">
-				<div class="col-lg-3 text-center sr-reveal" data-wow-delay="0.15s">
-					<div class="d-inline-block">
-						<div class="clock">
-							<svg viewBox="0 0 240 240" class="analog-clock-svg">
-								<defs>
-									<filter id="markerShadow" x="-30%" y="-30%" width="160%" height="160%">
-										<feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000000"
-											flood-opacity="0.5" />
-									</filter>
-									<filter id="handShadow" x="-30%" y="-30%" width="160%" height="160%">
-										<feDropShadow dx="2" dy="3" stdDeviation="2.5" flood-color="#000000"
-											flood-opacity="0.45" />
-									</filter>
-								</defs>
-
-								<!-- 12 Hour Markers (Dark Capsule Pills) -->
-								<g class="clock-markers">
-									@for ($i = 0; $i < 12; $i++)
-										@php $angle = $i * 30; @endphp
-										<g transform="translate(120, 120) rotate({{ $angle }}) translate(0, -92)">
-											<rect x="-3.5" y="-7" width="7" height="14" rx="3.5" fill="#1c1f22"
-												filter="url(#markerShadow)" />
-										</g>
-									@endfor
-								</g>
-
-								<!-- Hour Hand (Blue Rectangular Bar with Tip Notch) -->
-								<g class="clock-hand" id="clockHourHand" transform="translate(120, 120) rotate(0)">
-									<path d="M -6.5 10 L -6.5 -50 L -3 -50 L -3 -56 L 3 -56 L 3 -50 L 6.5 -50 L 6.5 10 Z"
-										fill="#003ce7" filter="url(#handShadow)" />
-								</g>
-
-								<!-- Minute Hand (Blue Rectangular Bar with Tip Notch) -->
-								<g class="clock-hand" id="clockMinuteHand" transform="translate(120, 120) rotate(0)">
-									<path d="M -6.5 12 L -6.5 -74 L -3 -74 L -3 -80 L 3 -80 L 3 -74 L 6.5 -74 L 6.5 12 Z"
-										fill="#003ce7" filter="url(#handShadow)" />
-								</g>
-
-								<!-- Second Hand (Silver Metallic Needle) -->
-								<g class="clock-hand" id="clockSecondHand" transform="translate(120, 120) rotate(0)">
-									<line x1="0" y1="18" x2="0" y2="-88" stroke="#a0a7ae" stroke-width="2.5"
-										stroke-linecap="round" filter="url(#handShadow)" />
-								</g>
-
-								<!-- Center Pivot Cap (Black Rounded Square) -->
-								<g transform="translate(120, 120)">
-									<rect x="-10" y="-10" width="20" height="20" rx="5" fill="#121417"
-										filter="url(#handShadow)" />
-								</g>
-							</svg>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 text-center sr-reveal hero-avatar-col" data-wow-delay="0.15s">
-					<div class="float-animation d-inline-block">
-						<div class="avatar-frame-container">
-							<img src="{{ asset('images/profile.jpg') }}" class="avatar-img" alt="Foto {{ $site['name'] }}"
-								draggable="false">
-							<img src="{{ asset('images/frame-s19.png') }}" class="avatar-frame-overlay"
-								alt="Bingkai Frame S19" draggable="false">
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-6 sr-reveal">
+				<div class="col-lg-7 text-center d-flex flex-column align-items-center justify-content-center sr-reveal">
 					<p class="hero-eyebrow" data-t="hero.halo">Saya</p>
 					<h1 class="hero-title mb-3">
 						<span class="text-gradient typing-name">{{ $site['name'] }}</span>
@@ -84,22 +21,33 @@
 						<span data-t="hero.role_prefix">{{ $site['hero']['role_prefix'] ?? 'Seorang' }}</span> <span
 							class="typing-role"></span>
 					</p>
-					<p class="hero-intro mb-4" data-t="hero.intro">{{ $site['hero']['intro'] }}</p>
-					<div class="d-flex flex-wrap gap-3">
+					<p class="hero-intro mb-4" data-t="hero.intro" style="max-width: 540px;">{{ $site['hero']['intro'] }}
+					</p>
+					<div class="d-flex flex-wrap justify-content-center gap-3">
 						<a href="{{ route('proyek') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
 							data-t="hero.cta_proyek">
 							Lihat Proyek <i class="fa-solid fa-arrow-right"></i>
 						</a>
 						<a href="{{ route('kontak') }}"
-							class="btn btn-outline-secondary btn-lg d-inline-flex align-items-center gap-2"
+							class="btn btn-outline-secondary btn-lg rounded-pill d-inline-flex align-items-center gap-2"
 							data-t="hero.cta_kontak">
 							<i class="fa-regular fa-envelope"></i> Hubungi Saya
 						</a>
 					</div>
-					<div class="d-flex flex-wrap gap-2 mt-4">
+					<div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
 						@foreach($site['hero']['tech'] as $tech)
 							<span class="chip">{{ $tech }}</span>
 						@endforeach
+					</div>
+				</div>
+				<div class="col-lg-5 text-center sr-reveal hero-avatar-col" data-wow-delay="0.15s">
+					<div class="float-animation d-inline-block">
+						<div class="avatar-frame-container">
+							<img src="{{ asset('images/profile.jpg') }}" class="avatar-img" alt="Foto {{ $site['name'] }}"
+								draggable="false">
+							<img src="{{ asset('images/frame-s19.png') }}" class="avatar-frame-overlay"
+								alt="Bingkai Frame S19" draggable="false">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -483,10 +431,19 @@
 	<script>
 		(function () {
 			function initAnalogClock() {
-				var secHand = document.getElementById("clockSecondHand");
-				var minHand = document.getElementById("clockMinuteHand");
-				var hrHand = document.getElementById("clockHourHand");
-				if (!secHand || !minHand || !hrHand) return;
+				if (typeof jQuery === "undefined") {
+					if (document.readyState === "loading") {
+						document.addEventListener("DOMContentLoaded", initAnalogClock);
+					} else {
+						setTimeout(initAnalogClock, 10);
+					}
+					return;
+				}
+				var $ = jQuery;
+				var $secHand = $("#clockSecondHand");
+				var $minHand = $("#clockMinuteHand");
+				var $hrHand = $("#clockHourHand");
+				if (!$secHand.length || !$minHand.length || !$hrHand.length) return;
 
 				function updateClock() {
 					var now = new Date();
@@ -495,19 +452,15 @@
 					var min = now.getMinutes() + sec / 60;
 					var hr = (now.getHours() % 12) + min / 60;
 
-					secHand.setAttribute("transform", "translate(120, 120) rotate(" + (sec * 6).toFixed(2) + ")");
-					minHand.setAttribute("transform", "translate(120, 120) rotate(" + (min * 6).toFixed(2) + ")");
-					hrHand.setAttribute("transform", "translate(120, 120) rotate(" + (hr * 30).toFixed(2) + ")");
+					$secHand.attr("transform", "translate(120, 120) rotate(" + (sec * 6).toFixed(2) + ")");
+					$minHand.attr("transform", "translate(120, 120) rotate(" + (min * 6).toFixed(2) + ")");
+					$hrHand.attr("transform", "translate(120, 120) rotate(" + (hr * 30).toFixed(2) + ")");
 
 					requestAnimationFrame(updateClock);
 				}
 				requestAnimationFrame(updateClock);
 			}
-			if (document.readyState === "loading") {
-				document.addEventListener("DOMContentLoaded", initAnalogClock);
-			} else {
-				initAnalogClock();
-			}
+			initAnalogClock();
 		})();
 	</script>
 @endsection

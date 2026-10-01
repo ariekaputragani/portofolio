@@ -1469,62 +1469,6 @@
   border-color: transparent;
 }
 
-/* Capsule Nav Item Half-Border Hover Animation */
-.sh-nav-capsule .sh-nav-item::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 9999px;
-  border: 1px solid #fff;
-  pointer-events: none;
-  opacity: 0;
-  -webkit-clip-path: inset(0 100% 0 0);
-  clip-path: inset(0 100% 0 0);
-  transition: opacity 0.12s cubic-bezier(0.16, 1, 0.3, 1),
-    clip-path 0.12s cubic-bezier(0.16, 1, 0.3, 1),
-    -webkit-clip-path 0.12s cubic-bezier(0.16, 1, 0.3, 1);
-  box-sizing: border-box;
-}
-
-.sh-nav-capsule .sh-nav-item:hover::after {
-  opacity: 1;
-  -webkit-clip-path: inset(0 0 0 0);
-  clip-path: inset(0 0 0 0);
-  animation: shNavCapsuleHalfBorder 1.5s cubic-bezier(0.1, 0.95, 0.95, 0.1) forwards;
-}
-
-@keyframes shNavCapsuleHalfBorder {
-  0% {
-    opacity: 1;
-    -webkit-clip-path: inset(0 100% 0 0);
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: cubic-bezier(0, 0, 0, 0.9);
-  }
-
-  15% {
-    opacity: 1;
-    -webkit-clip-path: inset(0 55% 0 0);
-    clip-path: inset(0 55% 0 0);
-    animation-timing-function: cubic-bezier(0.95, 0.75, 0.75, 0.95);
-  }
-
-  85% {
-    opacity: 1;
-    -webkit-clip-path: inset(0 45% 0 0);
-    clip-path: inset(0 45% 0 0);
-    animation-timing-function: cubic-bezier(0.65, 0, 0, 0);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-clip-path: inset(0 0 0 0);
-    clip-path: inset(0 0 0 0);
-  }
-}
-
 .sh-nav-item.active {
   background: #252830;
   border-color: rgba(255, 255, 255, 0.15);
@@ -1760,11 +1704,10 @@
   .sh-nav-capsule,
   #navControls {
     display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
-    min-width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     background: transparent !important;
@@ -1773,6 +1716,11 @@
     border: none !important;
     box-shadow: none !important;
     gap: 3.5rem !important;
+  }
+
+  /* Shift 6 menu buttons in mobile collapse navbar slightly to the left to align vertically with controls below */
+  .sh-nav-capsule {
+    transform: translateX(-1.25rem) !important;
   }
 
   .sh-nav-item,
@@ -1877,6 +1825,60 @@
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
+  }
+
+  /* Capsule Nav Item Half-Border Hover Animation */
+  .sh-nav-capsule .sh-nav-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 9999px;
+    border: 1px solid #fff;
+    pointer-events: none;
+    opacity: 0;
+    -webkit-clip-path: inset(0 100% 0 0);
+    clip-path: inset(0 100% 0 0);
+    transition: opacity 0.25s cubic-bezier(0.1, 0.95, 0.95, 0.1),
+      clip-path 0.25s cubic-bezier(0.1, 0.95, 0.95, 0.1),
+      -webkit-clip-path 0.25s cubic-bezier(0.1, 0.95, 0.95, 0.1);
+    box-sizing: border-box;
+  }
+
+  .sh-nav-capsule .sh-nav-item:hover::after {
+    opacity: 1;
+    animation: shNavCapsuleHalfBorder 1.5s cubic-bezier(0.1, 0.95, 0.95, 0.1) forwards;
+  }
+
+  @keyframes shNavCapsuleHalfBorder {
+    0% {
+      opacity: 1;
+      -webkit-clip-path: inset(0 100% 0 0);
+      clip-path: inset(0 100% 0 0);
+      animation-timing-function: cubic-bezier(0, 0, 0, 0.9);
+    }
+
+    15% {
+      opacity: 1;
+      -webkit-clip-path: inset(0 55% 0 0);
+      clip-path: inset(0 55% 0 0);
+      animation-timing-function: cubic-bezier(0.95, 0.75, 0.75, 0.95);
+    }
+
+    85% {
+      opacity: 1;
+      -webkit-clip-path: inset(0 45% 0 0);
+      clip-path: inset(0 45% 0 0);
+      animation-timing-function: cubic-bezier(0.65, 0, 0, 0);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-clip-path: inset(0 0 0 0);
+      clip-path: inset(0 0 0 0);
+    }
   }
 
   .navbar:not(.navbar-scrolled) {

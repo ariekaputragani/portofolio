@@ -1460,14 +1460,69 @@
   border: 1px solid transparent;
   border-radius: 9999px;
   text-decoration: none;
-  /* transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; */
-  transition: all 0.1s ease;
   display: inline-block;
+  position: relative;
 }
 
 .sh-nav-item:hover {
   outline: none;
-  border-color: #fff;
+  border-color: transparent;
+}
+
+/* Capsule Nav Item Half-Border Hover Animation */
+.sh-nav-capsule .sh-nav-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px;
+  border: 1px solid #fff;
+  pointer-events: none;
+  opacity: 0;
+  -webkit-clip-path: inset(0 100% 0 0);
+  clip-path: inset(0 100% 0 0);
+  transition: opacity 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    -webkit-clip-path 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.sh-nav-capsule .sh-nav-item:hover::after {
+  opacity: 1;
+  -webkit-clip-path: inset(0 0 0 0);
+  clip-path: inset(0 0 0 0);
+  animation: shNavCapsuleHalfBorder 1.5s cubic-bezier(0.1, 0.95, 0.95, 0.1) forwards;
+}
+
+@keyframes shNavCapsuleHalfBorder {
+  0% {
+    opacity: 1;
+    -webkit-clip-path: inset(0 100% 0 0);
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: cubic-bezier(0, 0, 0, 0.9);
+  }
+
+  15% {
+    opacity: 1;
+    -webkit-clip-path: inset(0 55% 0 0);
+    clip-path: inset(0 55% 0 0);
+    animation-timing-function: cubic-bezier(0.95, 0.75, 0.75, 0.95);
+  }
+
+  85% {
+    opacity: 1;
+    -webkit-clip-path: inset(0 45% 0 0);
+    clip-path: inset(0 45% 0 0);
+    animation-timing-function: cubic-bezier(0.65, 0, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-clip-path: inset(0 0 0 0);
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 .sh-nav-item.active {
@@ -1826,24 +1881,6 @@
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
-  }
-
-  .sh-nav-item {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .sh-nav-item .nav-icon {
-    font-size: 0.95rem;
-    margin-right: 0.45rem;
-  }
-
-  .sh-btn-contact .contact-icon {
-    margin-right: 0.45rem;
-  }
-
-  .lang-btn .lang-icon {
-    margin-right: 0.35rem;
   }
 
   .navbar:not(.navbar-scrolled) {

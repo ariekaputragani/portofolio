@@ -26,7 +26,7 @@
 	<link href="/css/select2.min.css" rel="stylesheet">
 	<link href="/css/sweetalert2.min.css" rel="stylesheet">
 	<link href="/css/style.css?v=13" rel="stylesheet">
-	<link href="/css/portfolio.css?v=115" rel="stylesheet">
+	<link href="/css/portfolio.css?v=119" rel="stylesheet">
 </head>
 <body id="top" data-spy="scroll">
     <div id="app">

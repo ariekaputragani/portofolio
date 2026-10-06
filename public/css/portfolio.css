@@ -1462,6 +1462,10 @@
   text-decoration: none;
   display: inline-block;
   position: relative;
+
+  /* Label tidak pernah pecah jadi 2 baris; di 992-1199.98px ikonnya yang
+     disembunyikan (lihat media query di bawah), bukan jaraknya yang dikecilkan */
+  white-space: nowrap;
 }
 
 .sh-nav-item:hover {
@@ -1841,15 +1845,21 @@
     opacity: 0;
     -webkit-clip-path: inset(0 100% 0 0);
     clip-path: inset(0 100% 0 0);
-    transition: opacity 0.25s cubic-bezier(0.1, 0.95, 0.95, 0.1),
-      clip-path 0.25s cubic-bezier(0.1, 0.95, 0.95, 0.1),
-      -webkit-clip-path 0.25s cubic-bezier(0.1, 0.95, 0.95, 0.1);
     box-sizing: border-box;
   }
 
   .sh-nav-capsule .sh-nav-item:hover::after {
     opacity: 1;
-    animation: shNavCapsuleHalfBorder 1.5s cubic-bezier(0.1, 0.95, 0.95, 0.1) forwards;
+    animation: shNavCapsuleHalfBorder 1.5s cubic-bezier(0.95, 0.75, 0.75, 0.95) forwards;
+  }
+
+  /* Capsule Nav Item: transisi KELUAR (kursor pergi dari tombol).
+     Border ditarik ke kiri selama 0.25s dengan cubic-bezier yang sama seperti
+     hover. Kelas .sh-nav-out dipasang/dilepas oleh JS (navigation.blade.php):
+     CSS tidak bisa memicu animasi dari state :hover yang sudah berakhir, dan
+     juga tidak bisa melanjutkan dari posisi animasi yang sedang berjalan. */
+  .sh-nav-capsule .sh-nav-item.sh-nav-out::after {
+    animation: shNavCapsuleHalfBorderOut 0.25s cubic-bezier(0.95, 0.75, 0.75, 0.95) forwards;
   }
 
   @keyframes shNavCapsuleHalfBorder {
@@ -1878,6 +1888,26 @@
       opacity: 1;
       -webkit-clip-path: inset(0 0 0 0);
       clip-path: inset(0 0 0 0);
+    }
+  }
+
+  /* Keluar hover: mulai dari kondisi animasi masuk yang SEDANG berjalan
+     (--sh-nav-out-clip diisi JS dari nilai clip-path ::after saat itu juga),
+     jadi kursor yang pergi di tengah-tengah wipe masuk tidak bikin border
+     meloncat. Kalau variabelnya kosong, mulai dari keyframe terakhir hover
+     (border penuh) seperti biasa. */
+  @keyframes shNavCapsuleHalfBorderOut {
+    0% {
+      opacity: 1;
+      -webkit-clip-path: var(--sh-nav-out-clip, inset(0 0 0 0));
+      clip-path: var(--sh-nav-out-clip, inset(0 0 0 0));
+      animation-timing-function: cubic-bezier(0.95, 0.75, 0.75, 0.95);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-clip-path: inset(0 100% 0 0);
+      clip-path: inset(0 100% 0 0);
     }
   }
 
@@ -1914,6 +1944,21 @@
   .navbar:not(.navbar-scrolled) .sh-btn-contact {
     padding: 1rem 1.5rem;
     font-size: 1rem;
+  }
+}
+
+/* Tablet-ish desktop: 992px - 1199.98px.
+   Container Bootstrap di rentang ini cuma 960px (di >=1200px jadi 1140px), jadi
+   capsule + tombol kanan tidak cukup ruang untuk ikon + label sekaligus.
+   Kalau dipaksa, tiap item ter-shrink lalu label membungkus ke baris kedua dan
+   ikon terdorong ke atas (terlihat "hilang").
+   Solusinya TANPA menyentuh spacing: di rentang ini tombol capsule memakai teks
+   saja - ikon Font Awesome disembunyikan. Padding, margin, gap, font-size, dan
+   tinggi navbar tetap apa adanya; ikon kembali muncul di >=1200px dan di layout
+   mobile (<=991.98px) yang memang sudah menampilkan ikon besar. */
+@media (min-width: 992px) {
+  .sh-nav-capsule .sh-nav-item i {
+    display: none;
   }
 }
 

@@ -44,6 +44,98 @@
     (function () {
         "use strict";
 
+        // Transisi KELUAR (unhover) untuk tombol capsule navbar.
+        // Animasi masuk hanya bisa dipicu CSS lewat :hover, dan begitu kursor
+        // pergi pseudo-element-nya langsung hilang (terlihat kaku/monoton).
+        // Karena CSS tidak bisa mengingat state hover yang sudah berakhir, kelas
+        // .sh-nav-out dipasang di sini supaya wipe ke kiri (lihat portfolio.css)
+        // tetap berjalan sebelum border benar-benar hilang.
+        //
+        // Nilai clip-path animasi masuk yang SEDANG berjalan dicatat tiap frame
+        // (dan ditulis ke --sh-nav-out-clip saat kursor pergi), jadi kalau
+        // kursor pergi di tengah animasi, wipe keluar lanjut dari posisi itu
+        // dan tidak meloncat ke border penuh. Kalau tidak terbaca, CSS memakai
+        // keyframe terakhir hover (border penuh) seperti biasa.
+        function initCapsuleExitWipe() {
+            var items = document.querySelectorAll(".sh-nav-capsule .sh-nav-item");
+            if (!items.length) return;
+
+            Array.prototype.forEach.call(items, function (item) {
+                var frame = 0;
+                var lastClip = "";
+
+                function readClip() {
+                    lastClip = "";
+
+                    try {
+                        var style = window.getComputedStyle(item, "::after");
+                        var clip = style.clipPath || style.webkitClipPath;
+
+                        // hanya nilai inset() yang bisa diinterpolasi animasi
+                        if (clip && clip.indexOf("inset") === 0) {
+                            lastClip = clip;
+                        }
+                    } catch (e) {
+                        if (window.console) console.warn("Capsule exit wipe error:", e);
+                    }
+                }
+
+                // Border sudah penuh = animasi masuk sudah di keyframe terakhir
+                function isHoverAnimFinished(clip) {
+                    return !!clip && /^inset\(\s*0(px|%)?\s+0(px|%)?\s+0(px|%)?\s+0(px|%)?\s*\)$/.test(clip);
+                }
+
+                function watch() {
+                    frame = 0;
+                    readClip();
+
+                    // Animasi masuk sudah tuntas (sudah di keyframe terakhir),
+                    // tidak perlu lanjut memantau tiap frame
+                    if (!isHoverAnimFinished(lastClip)) {
+                        frame = window.requestAnimationFrame(watch);
+                    }
+                }
+
+                item.addEventListener("mouseenter", function () {
+                    item.classList.remove("sh-nav-out");
+                    item.style.removeProperty("--sh-nav-out-clip");
+                    lastClip = "";
+
+                    if (!frame && window.requestAnimationFrame) {
+                        frame = window.requestAnimationFrame(watch);
+                    }
+                });
+
+                item.addEventListener("mouseleave", function () {
+                    if (frame && window.cancelAnimationFrame) {
+                        window.cancelAnimationFrame(frame);
+                        frame = 0;
+                    }
+
+                    // Jangan baca ulang di sini: :hover sudah lepas, jadi
+                    // nilainya cuma state dasar (tersembunyi). Pakai nilai
+                    // terakhir yang dicatat watch() saat kursor masih di atas.
+                    if (!lastClip) {
+                        readClip();
+                    }
+
+                    item.style.removeProperty("--sh-nav-out-clip");
+
+                    if (lastClip) {
+                        item.style.setProperty("--sh-nav-out-clip", lastClip);
+                    }
+
+                    item.classList.add("sh-nav-out");
+                });
+            });
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initCapsuleExitWipe);
+        } else {
+            initCapsuleExitWipe();
+        }
+
         function initNavbar() {
             if (typeof jQuery === "undefined") {
                 if (document.readyState === "loading") {

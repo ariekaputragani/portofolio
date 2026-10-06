@@ -2,9 +2,21 @@
 
 body {
 	background:
-		radial-gradient(circle at 12% 18%, rgba(25, 135, 84, 0.92), transparent 42%),
-		radial-gradient(circle at 88% 85%, rgba(11, 94, 215, 0.95), transparent 42%),
-		linear-gradient(180deg, #141a21, #0d1117);
+		radial-gradient(circle at 12% 18%,
+			#FEDA7526 0%,
+			#FA7E1E26 9%,
+			#D6297626 22%,
+			#962FBF26 31%,
+			#4F5BD526 35%,
+			#4F5BD500 46%),
+		/* Lingkaran gradient — pojok kanan-bawah */
+		radial-gradient(circle at 88% 85%,
+			#244F48 0%,
+			#1E3E3B 16%,
+			#182629 28%,
+			#181B24 34%,
+			#1A0F1F 46%),
+		#1A0F1F;
 
 	background-attachment: fixed;
 	color: #e6e9ee;
@@ -40,11 +52,7 @@ a:active {
 	flex-flow: row nowrap;
 	justify-content: center;
 	align-items: center;
-	background:
-		radial-gradient(circle at 15% 20%, rgba(61, 220, 132, 0.25), transparent 45%),
-		radial-gradient(circle at 85% 80%, rgba(111, 168, 255, 0.25), transparent 45%),
-		radial-gradient(circle at 50% 50%, rgba(255, 213, 77, 0.12), transparent 50%),
-		linear-gradient(180deg, #141a21 0%, #0d1117 50%, #0b1020 100%);
+	background: #1A0F1F;
 }
 
 .spinner {
@@ -235,7 +243,7 @@ footer,
 	--bs-btn-bg: #0d6efd;
 	--bs-btn-border-color: #0d6efd;
 	--bs-btn-hover-color: #fff;
-	--bs-btn-hover-bg: #424649;
+	--bs-btn-hover-bg: #6c4649;
 	--bs-btn-hover-border-color: #373b3e;
 	--bs-btn-focus-shadow-rgb: 66, 70, 73;
 	--bs-btn-active-color: #fff;

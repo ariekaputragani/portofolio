@@ -2,7 +2,7 @@
 
 @section('content')
 @include('layouts.banner')
-<div class="container py-5 huruf-serif">
+<div class="container py-5 huruf-serif pf-fixed-background">
     <div class="row">
         <div class="col-3">
             @include('layouts.nav')

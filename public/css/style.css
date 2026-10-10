@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
+*,
+*::after,
+*::before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
 body {
 	background:
 		radial-gradient(circle at 12% 18%,
@@ -17,7 +30,10 @@ body {
 			#181B24 34%,
 			#1A0F1F 46%),
 		#1A0F1F;
-
+	position: relative;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
 	background-attachment: fixed;
 	color: #e6e9ee;
 	overflow-x: hidden;
@@ -208,15 +224,13 @@ footer,
 	background: rgba(255, 255, 255, 0.7);
 }
 
-.lamcb .card-img-top,
-.img-1 {
+.lamcb .card-img-top {
 	filter: brightness(100%);
 	opacity: 1;
 	transition: all 0.4s ease-in-out;
 }
 
-.lamcb .card-img-top:hover,
-.img-1:hover {
+.lamcb .card-img-top:hover {
 	filter: brightness(70%);
 	opacity: 0.7;
 }

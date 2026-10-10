@@ -3,7 +3,7 @@
 @php $siteImages = ['gambar4.jpg', 'akomodasi.jpg', '24-7-service.jpg', 'about-bg.jpg']; @endphp
 
 @section('content')
-<div class="pf-scope pf-hero-bg py-5">
+<div class="pf-scope pf-hero-bg pf-fixed-background py-5">
 	<div class="container py-4">
 		<div class="hero-card-frame p-4 p-lg-5">
 			<div class="mb-5">

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="no-js">
 
 <head>
 	<meta charset="utf-8">
@@ -28,14 +28,17 @@
 	<link href="/css/owl.carousel.css" rel="stylesheet">
 	<link href="/css/select2.min.css" rel="stylesheet">
 	<link href="/css/sweetalert2.min.css" rel="stylesheet">
-	<link href="/css/style.css?v=14" rel="stylesheet">
-	<link href="/css/portfolio.css?v=123" rel="stylesheet">
+	<link href="/css/style.css?v={{ filemtime(public_path('css/style.css')) }}" rel="stylesheet">
+	<link href="/css/portfolio.css?v={{ filemtime(public_path('css/portfolio.css')) }}" rel="stylesheet">
+
+	<!-- Modernizr (CodyHouse fixed-background-effect) -->
+	<script src="/js/modernizr.js"></script>
 </head>
 
 <body id="top" data-spy="scroll">
 	<div id="app">
 		<section class="preloader">
-			<div class="spinner-grow text-primary" role="status">
+			<div class="spinner-grow text-warning" role="status">
 				<span class="visually-hidden">Loading...</span>
 			</div>
 		</section>

@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => $project['title'] . ' - '])
 
 @section('content')
-<div class="pf-scope pf-hero-bg py-5">
+<div class="pf-scope pf-hero-bg pf-fixed-background py-5">
     <div class="container py-4">
         <div class="hero-card-frame p-4 p-lg-5">
             <a href="{{ route('proyek') }}" class="btn btn-outline-secondary btn-sm rounded-pill mb-4 d-inline-flex align-items-center gap-2" data-t="proyek.kembali">

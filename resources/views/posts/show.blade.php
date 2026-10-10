@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => $post->title . ' - '])
 
 @section('content')
-<div class="lamcn app-serif">
+<div class="lamcn app-serif pf-fixed-background">
     <section id="ads">
         <div class="container p-5">
             <div class="ads-1">
@@ -16,7 +16,7 @@
             </div>
         </div>
     </section>
-    <section id="news-detail" data-stellar-background-ratio="0.5">
+    <section id="news-detail">
         <div class="container pb-5">
             <div class="row justify-content-between">
                 <div class="col-md-7 article p-4">

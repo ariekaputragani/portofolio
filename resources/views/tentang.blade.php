@@ -3,7 +3,7 @@
 @php $site = config('portfolio'); @endphp
 
 @section('content')
-<div class="pf-scope pf-hero-bg py-5">
+<div class="pf-scope pf-hero-bg pf-fixed-background py-5">
     <div class="container py-4">
         <div class="hero-card-frame p-4 p-lg-5">
             <div class="row align-items-center gy-5">
@@ -34,5 +34,4 @@
         </div>
     </div>
 </div>
-@include('layouts.map')
 @endsection

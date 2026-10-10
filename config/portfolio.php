@@ -156,6 +156,73 @@ return [
             ['name' => 'Figma', 'level' => 'Advanced'],
         ],
     ],
+
+    // Tiga pilar activities: Blog Publikasi, Layanan, Edukasi.
+    // Diadaptasi dari struktur "TRI DHARMA" (Education / Research & Publications /
+    // Service) milik https://www.res.my.id/
+    'big_sins' => [
+        [
+            'slug' => 'blog-publikasi',
+            'title' => 'Blog Publikasi',
+            'icon' => 'fa-solid fa-pen-nib',
+            'description' => 'Catatan dari proses belajar dan pengerjaan proyek nyata, ditulis supaya orang lain tidak mengulang kesalahan yang sama.',
+            'points' => [
+                'Catatan teknis & tutorial',
+                'Ringkasan temuan proyek',
+                'Catatan optimasi & performa',
+                'Diperbarui secara berkala',
+            ],
+        ],
+        [
+            'slug' => 'layanan',
+            'title' => 'Layanan',
+            'icon' => 'fa-solid fa-handshake',
+            'description' => 'Bantuan teknis untuk website sampai aplikasi web, dikerjakan dengan komunikasi yang jelas dan progres yang rutin.',
+            'points' => [
+                'Pengembangan website',
+                'CMS & integrasi pihak ketiga',
+                'Optimasi SEO & performa',
+                'Pemeliharaan & perbaikan',
+            ],
+        ],
+        [
+            'slug' => 'edukasi',
+            'title' => 'Edukasi',
+            'icon' => 'fa-solid fa-graduation-cap',
+            'description' => 'Menjelaskan konsep yang saya pelajari dengan bahasa yang lebih sederhana, supaya bermanfaat bagi yang baru mulai.',
+            'points' => [
+                'Penjelasan konsep dasar',
+                'Panduan langkah demi langkah',
+                'Rekomendasi alat & pustaka',
+                'Contoh kode yang bisa dijalankan',
+            ],
+        ],
+    ],
+
+    // Timeline perjalanan belajar & berkarya. Sengaja tanpa nama perusahaan,
+    // nama klien, atau tahun spesifik supaya tidak mengarang fakta.
+    'journey' => [
+        [
+            'period' => 'Awal Mula',
+            'title' => 'Mulai dari halaman kosong',
+            'description' => 'Belajar HTML, CSS, dan JavaScript dari nol, lalu membuat halaman statis pertama untuk memahami cara browser merender sesuatu.',
+        ],
+        [
+            'period' => 'Bertambah',
+            'title' => 'Masuk ke sisi server',
+            'description' => 'Berpindah ke PHP dan basis data, lalu memisahkan logika dari tampilan supaya kodenya lebih mudah dirawat.',
+        ],
+        [
+            'period' => 'Produk',
+            'title' => 'Membangun dengan Laravel',
+            'description' => 'Memanfaatkan Laravel untuk autentikasi, routing, dan basis data, sehingga proyek sederhana bisa tumbuh menjadi aplikasi utuh.',
+        ],
+        [
+            'period' => 'Sekarang',
+            'title' => 'Rapi, cepat, dan bisa dipercaya',
+            'description' => 'Fokus pada performa, SEO, dan aksesibilitas, sambil menulis ulang ilmunya di blog supaya orang lain ikut memakainya.',
+        ],
+    ],
     'translations' => [
         'en' => [
             'nav.beranda' => 'Home',
@@ -180,6 +247,12 @@ return [
             'about.text' => 'I am a Full-stack Web Developer who loves turning ideas into real digital products. From designing architecture to interaction details, I strive to deliver the best quality in every project.',
             'about.cta' => 'Learn More',
             'about.skills' => 'Skills',
+            'bigsins.eyebrow' => 'Three Pillars',
+            'bigsins.title' => 'Three Big Sins',
+            'bigsins.subtitle' => 'Three things I keep doing: writing, building, and teaching.',
+            'journey.eyebrow' => 'Journey',
+            'journey.title' => 'How I Got Here',
+            'journey.subtitle' => 'The path from a blank page to shipping maintainable web apps.',
             'layanan.eyebrow' => 'Services',
             'layanan.title' => 'What I offer',
             'layanan.subtitle' => 'Complementary services to support your digital needs.',

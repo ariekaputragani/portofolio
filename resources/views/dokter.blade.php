@@ -2,7 +2,7 @@
 
 @section('content')
 @include('layouts.banner')
-<div class="bg-krem py-5 app-serif">
+<div class="bg-krem py-5 app-serif pf-fixed-background">
     <div class="container pt-3">
         <h1 class="wow fadeInLeft" data-wow-delay="0.2s">Jadwal Dokter</h1>
         <hr>

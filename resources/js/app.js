@@ -1,32 +1,25 @@
 /**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
+ * Entry point bundle.
+ *
+ * PENTING — jangan pernah `new Vue({ el: '#app' })` di file ini lagi.
+ *
+ * Halaman ini dirender penuh di server oleh Blade (lihat resources/views/
+ * layouts/app.blade.php: <div id="app"> berisi navbar + @yield('content') +
+ * footer). Kalau Vue di-mount ke '#app' tanpa `template`, Vue memakai
+ * in-DOM template: SELURUH ~120KB DOM hasil render server dibuang lalu
+ * dibangun ulang dari nol oleh Vue.
+ *
+ * Akibatnya saat pertama page load:
+ *   - seluruh node baru -> layout + paint diulang -> halaman berkedip,
+ *   - <script> inline di dalam #app ikut terhapus (navbar hover wipe),
+ *   - semua handler jQuery yang di-bind ke node di dalam #app hilang,
+ *   - animasi/transition CSS yang sedang jalan mulai dari awal,
+ *   - request gambar yang sedang berjalan dibatalkan & diulang.
+ *
+ * Tidak ada satu pun view yang memakai komponen Vue (tidak ada
+ * <example-component>, tidak ada direktif v- prefixed maupun :binding / @event),
+ * jadi mount itu murni memberatkan halaman. Kalau suatu saat memang butuh Vue,
+ * mount ke elemen sendiri yang kosong — jangan pernah ke wrapper halaman.
  */
 
 require('./bootstrap');
-
-window.Vue = require('vue').default;
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app',
-});

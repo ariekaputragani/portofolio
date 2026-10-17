@@ -1,4 +1,90 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+/* Font Google (Poppins + Plus Jakarta Sans) TIDAK di-@import di sini.
+   Layout sudah memakainya lewat <link> di <head>:
+     https://fonts.googleapis.com/css2?family=Poppins...&family=Plus+Jakarta+Sans...
+   CSS @import di dalam stylesheet yang memblokir render adalah satu
+   round-trip ekstra SERIAL: aturan di bawah file ini baru berlaku
+   setelah request Google Fonts selesai. Karena hampir semua stylesheet
+   di layout bersifat render-blocking, penundaan itu ikut menahan
+   first paint - dan selama masa itu ikon Font Awesome (font-display:
+   block) masih kosong. */
+
+/* ============================================================
+   FAIRFAX HD - font utama seluruh situs.
+
+   DITEMPATKAN DI FILE INI, bukan di portfolio.css, karena style.css
+   satu-satunya stylesheet yang DIMUAT SEMUA layout:
+     - layouts/app.blade.php  -> style.css + portfolio.css
+     - layouts/app2.blade.php -> style.css saja (halaman auth,
+       admin/doctor, form post)
+   Kalau @font-face hanya ada di portfolio.css, semua halaman
+   app2 akan jatuh ke monospace sistem padahal style.css di sana
+   sudah menulis var(--pf-font-main, 'Fairfax', monospace).
+
+   Self-hosted, BUKAN Google Fonts. Fairfax HD sama sekali tidak ada
+   di Google Fonts / Fontsource / npm; file aslinya hanya tersedia
+   lewat portal download, jadi tidak bisa dimuat dari CDN.
+
+   Sumber file: public/fonts/fairfax/ (SIL OFL 1.1,
+   Copyright (c) 2008-2020 Kreative Software). OFL mengizinkan
+   embedding di website, termasuk komersial. Salinan lisensinya
+   ada di public/fonts/fairfax/OFL.txt.
+
+   File yang dipakai LANGSUNG file .ttf asli (bukan hasil subset
+   woff2). Konsekuensinya: 2 file yang diunduh browser
+   (Regular + Bold) total 5,8 MB. TTF dan WOFF2 berisi outline
+   yang IDENTIK, jadi hasil render, ukuran teks, jarak antar
+   karakter, dan tinggi baris TIDAK BERUBAH sama sekali - yang
+   berubah hanya besar file yang dipindahkan lewat jaringan.
+
+   KENAPA ADA DUA SLOT WEIGHT YANG MENUNJUK FILE SAMA:
+     - Isi font asli punya usWeightClass 500 untuk file "Medium"
+       dan 700 untuk "Bold". Browser TIDAK selalu memakai file
+       closest-weight kalau weight yang diminta tidak ada -
+       ia bisa MENYINTESIS fake-bold yang membuat glyph melebar.
+     - Dengan menyodorkan file yg sama di dua slot weight, semua
+       permintaan 100-600 dijawab file aslinya (tanpa sintetis),
+       dan 700+ dijawab file Bold asli.
+
+   Fallback: monospace. Fairfax HD adalah font MONOSPACE halfwidth
+   (lebar sel tetap 600/1200 upem = 0,5em). Kalau file gagal dimuat,
+   teks tetap keluar dengan lebar tetap - jauh lebih baik daripada
+   lompat ke proporsional yang bikin semua baris berubah tinggi.
+   ============================================================ */
+@font-face {
+  font-family: 'Fairfax';
+  font-style: normal;
+  font-weight: 100 600;
+  font-display: swap;
+  src: url('/fonts/fairfax/Fairfax.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Fairfax';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+  src: url('/fonts/fairfax/FairfaxBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Fairfax';
+  font-style: italic;
+  font-weight: 100 600;
+  font-display: swap;
+  src: url('/fonts/fairfax/FairfaxItalic.ttf') format('truetype');
+}
+
+/* Varian serif. Tidak dipakai di mana pun saat ini, tapi tetap
+   dideklarasikan supaya tidak perlu @font-face tambahan nanti.
+   Browser hanya mengunduh file ini kalau ada elemen yang benar-benar
+   memakainya, jadi deklarasi ini tidak menambah byte yang diunduh. */
+@font-face {
+  font-family: 'Fairfax Serif';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/fairfax/FairfaxSerif.ttf') format('truetype');
+}
 
 *,
 *::after,
@@ -14,27 +100,6 @@ body {
 }
 
 body {
-	background:
-		radial-gradient(circle at 12% 18%,
-			#FEDA7526 0%,
-			#FA7E1E26 9%,
-			#D6297626 22%,
-			#962FBF26 31%,
-			#4F5BD526 35%,
-			#4F5BD500 46%),
-		/* Lingkaran gradient — pojok kanan-bawah */
-		radial-gradient(circle at 88% 85%,
-			#244F48 0%,
-			#1E3E3B 16%,
-			#182629 28%,
-			#181B24 34%,
-			#1A0F1F 46%),
-		#1A0F1F;
-	position: relative;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center center;
-	background-attachment: fixed;
 	color: #e6e9ee;
 	overflow-x: hidden;
 }
@@ -54,55 +119,7 @@ a:active {
 }
 
 .app-serif {
-	font-family: serif;
-}
-
-.preloader {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 99999;
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: center;
-	align-items: center;
-	background: #1A0F1F;
-}
-
-.spinner {
-	border: 1px solid transparent;
-	border-radius: 3px;
-	position: relative;
-}
-
-.spinner:before {
-	content: '';
-	box-sizing: border-box;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 45px;
-	height: 45px;
-	margin-top: -10px;
-	margin-left: -10px;
-	border-radius: 50%;
-	border: 1px solid #575757;
-	border-top-color: #ffffff;
-	animation: spinner .9s linear infinite;
-}
-
-@-webkit-@keyframes spinner {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-@keyframes spinner {
-	to {
-		transform: rotate(360deg);
-	}
+	font-family: var(--pf-font-main, 'Fairfax', monospace);
 }
 
 nav,
@@ -114,25 +131,11 @@ footer,
 .rn-ct,
 .rn-tg,
 .huruf-serif {
-	font-family: sans-serif;
-}
-
-.book-btn {
-	--bs-btn-color: #fff;
-	--bs-btn-bg: #198754;
-	--bs-btn-border-color: #198754;
-	--bs-btn-hover-color: #000;
-	--bs-btn-hover-bg: #ffca2c;
-	--bs-btn-hover-border-color: #ffc720;
-	--bs-btn-focus-shadow-rgb: 60, 153, 110;
-	--bs-btn-active-color: #000;
-	--bs-btn-active-bg: #ffcd39;
-	--bs-btn-active-border-color: #ffc720;
-	--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-	--bs-btn-disabled-color: #000;
-	--bs-btn-disabled-bg: #ffc107;
-	--bs-btn-disabled-border-color: #ffc107;
-	font-weight: 600;
+	/* Dulu `sans-serif` polos (font bawaan browser). Sekarang Fairfax,
+	   sama seperti sisa situs. Fallback `monospace` disengaja karena
+	   Fairfax juga monospace - kalau gagal dimuat, hierarki width-nya
+	   tetap sama sehingga baris tidak melompat ke proporsional. */
+	font-family: var(--pf-font-main, 'Fairfax', monospace);
 }
 
 .dropdown:hover .dropdown-menu {
@@ -428,7 +431,7 @@ footer .social li a:hover,
 
 .ads-5 {
 	position: absolute;
-	font-family: Verdana;
+	font-family: var(--pf-font-main, 'Fairfax', monospace);
 	color: #ff0000;
 	font-weight: bold;
 	font-size: 12pt;
@@ -926,12 +929,22 @@ footer .social li a:hover,
 	font-style: normal !important;
 }
 
+/* Typewriter (.font-style-serif diputar oleh typewriter.js).
+   Font FRAUNCES weight 700 - serif kontras tinggi ala editorial.
+   Georgia hanya FALLBACK untuk kalau request Google Fonts gagal,
+   jadi harusnya SELALU ditulis setelah Fraunces. Weight harus PERSIS
+   sama dengan yang diminta di link Google Fonts
+   (Fraunces:opsz,wght@9..144,700) - kalau tidak, browser mengulers
+   instance terdekat dari file yang ada, hasilnya bukan 700 asli. */
 .font-style-serif {
-	font-family: Georgia, 'Times New Roman', serif !important;
+	font-family: 'Fraunces', Georgia, 'Times New Roman', serif !important;
 	font-weight: 700 !important;
 	letter-spacing: -0.01em !important;
 	line-height: 1.25 !important;
 	font-style: normal !important;
+	font-optical-sizing: auto !important;
+	-webkit-font-smoothing: antialiased !important;
+	-moz-osx-font-smoothing: grayscale !important;
 }
 
 .typing-role {

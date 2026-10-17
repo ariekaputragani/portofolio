@@ -1,5 +1,9 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+// Font: Nunito TIDAK di-@import dari sini.
+// Layout sudah memakainya lewat <link> di <head>
+// (https://fonts.googleapis.com/css?family=Nunito). CSS @import di dalam
+// stylesheet render-blocking menambah satu round-trip serial dan ikut
+// menahan first paint - dan selama masa itu ikon Font Awesome
+// (font-display: block) masih kosong, jadi terlihat berkedip hilang.
 
 // Variables
 @import 'variables';

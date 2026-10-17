@@ -9,37 +9,96 @@
 	$journey = $site['journey'] ?? [];
 @endphp
 
+@push('head')
+	<link rel="preload" as="image" href="{{ asset('images/img-1.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-2.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-3.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-4.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-5.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-6.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-7.jpg') }}" fetchpriority="high">
+	<link rel="preload" as="image" href="{{ asset('images/img-8.jpg') }}" fetchpriority="high">
+@endpush
+
 @section('content')
-	<section class="pf-fixed-background hero pf-scope">
+	<section class="pf-fixed-background hero">
 		<div class="hero-content-wrapper w-100 flex-grow-1 d-flex align-items-center">
 			<div class="container">
 				<div class="row align-items-center gy-5">
-					<div
-						class="col-lg-7 text-center d-flex flex-column align-items-center justify-content-center sr-reveal">
+					<div class="col-xl-7 col-lg-8 text-center d-flex flex-column align-items-center justify-content-center">
 						<p class="hero-eyebrow" data-t="hero.halo">Saya</p>
 						<h1 class="hero-title mb-3">
-							<span class="text-gradient typing-name">{{ $site['name'] }}</span>
-						</h1>
-						<p class="hero-role mb-3">
-							<span data-t="hero.role_prefix">{{ $site['hero']['role_prefix'] ?? 'Seorang' }}</span> <span
-								class="typing-role"></span>
-						</p>
-						<p class="hero-intro mb-4" data-t="hero.intro" style="max-width: 540px;">
-							{{ $site['hero']['intro'] }}
-						</p>
-						<div class="d-flex flex-wrap justify-content-center gap-3">
-							<a href="{{ route('proyek') }}"
-								class="btn book-btn btn-lg d-inline-flex align-items-center gap-2" data-t="hero.cta_proyek">
-								Lihat Proyek <i class="fa-solid fa-arrow-right"></i>
-							</a>
-							<a href="{{ route('kontak') }}"
-								class="btn btn-outline-secondary btn-lg rounded-pill d-inline-flex align-items-center gap-2"
-								data-t="hero.cta_kontak">
-								<i class="fa-regular fa-envelope"></i> Hubungi Saya
-							</a>
-						</div>
+							<span class="text-gradient typing-name"
+								data-name="{{ $site['name'] }}">{{ $site['name'] }}</span>
+							{{-- Script ini WAJIB inline di sini - jangan dipindah ke
+
+							<head>
+								dan jangan digabung ke typewriter.js.
+
+								Alasannya urutan waktu: browser mulai mengecat begitu
+								stylesheet di
+
+								<head> siap, tanpa menunggu script di
+
+								<body>. typewriter.js baru jalan di DOMContentLoaded,
+									yang ditunda script defer /js/app.js (888 KB).
+									Akibatnya nama lengkap sudah tampil sekitar 1 detik,
+									lalu ketika typewriter.js finally jalan ia langsung
+									mengetik dari "A" sehingga nama menyusut jadi satu
+									huruf lalu diketik ulang dari awal. Itu kedipnya.
+
+									Script inline di dalam <h1> jalan saat PARSE, jadi
+										sebelum frame pertama di-paint - satu-satunya waktu
+										yang tepat untuk ini.
+
+										Yang dilakukan hanya memasang kelas yang menyembunyikan
+										nama (visibility: hidden, ruang tetap). typewriter.js
+										melepasnya tepat sebelum mulai mengetik.
+
+										Kalau JS dimatikan, script ini tidak pernah jalan,
+										kelas tidak pernah dipasang, dan nama tetap tampil utuh. --}}
+										<script>
+											(function () {
+												var script = document.currentScript;
+												var el = script && script.previousElementSibling;
+												if (!el || !el.classList.contains("typing-name")) return;
+												el.classList.add("typing-name-pending");
+												// Jaring pengaman: kalau typewriter.js gagal dimuat,
+												// jangan sampai nama hilang permanen.
+												setTimeout(function () {
+													el.classList.remove("typing-name-pending");
+												}, 3000);
+											})();
+										</script>
+									</h1>
+									<p class="hero-role mb-3">
+										<span
+											data-t="hero.role_prefix">{{ $site['hero']['role_prefix'] ?? 'Seorang' }}</span>
+										<span class="typing-role"></span>
+									</p>
+									{{-- Motto tetap di hero: Motto #3 (Introvert Berkualitas)
+									Sengaja TIDAK diberi `data-t="hero.intro"`: translate.js akan
+									menimpa isinya dengan kalimat generic jika ada.
+									Nama pengarang ditulis di sini dengan <br> agar semantik
+									kutipan tetap utuh dalam satu elemen <p>. --}}
+									<p class="text-secondary mb-4" style="max-width: 34rem; margin-inline: auto;">
+										{{ is_array($site['hero']['intro']) ? ($site['hero']['intro'][2] ?? $site['hero']['intro'][0]) : $site['hero']['intro'] }}<br>
+										-{{ config('portfolio.name') }}
+									</p>
+									<div class="d-flex flex-wrap justify-content-center gap-3">
+										<a href="{{ route('proyek') }}"
+											class="btn project-btn btn-lg rounded-pill d-inline-flex align-items-center gap-2"
+											data-t="hero.cta_proyek">
+											Lihat Proyek <i class="fa-solid fa-arrow-right"></i>
+										</a>
+										<a href="{{ route('kontak') }}"
+											class="btn btn-outline-secondary btn-lg rounded-pill d-inline-flex align-items-center gap-2"
+											data-t="hero.cta_kontak">
+											<i class="fa-regular fa-envelope"></i> Hubungi Saya
+										</a>
+									</div>
 					</div>
-					<div class="col-lg-5 text-center sr-reveal hero-avatar-col" data-wow-delay="0.15s">
+					<div class="col-xl-5 col-lg-4 text-center hero-avatar-col">
 						<div class="float-animation d-inline-block">
 							<div class="avatar-frame-container">
 								<img src="{{ asset('images/profile.jpg') }}" class="avatar-img"

@@ -26,20 +26,40 @@ return [
             'Backend Developer',
             'Software Engineer',
         ],
-        'intro' => 'Saya membangun pengalaman web yang cepat, modern, dan mudah digunakan — mulai dari landing page hingga aplikasi kompleks.',
+        // Motto utama hero: Motto #3 (Introvert Berkualitas) dipasang tetap.
+        // Koleksi motto lainnya disimpan di 'motto_archive' di bawah agar tidak hilang.
+        'intro' => '"Mencoba mengubah diri menjadi introvert berkualitas daripada menjadi introvert medioker atau lembek. Karena jujur saya pribadi, saya masih tergolong medioker dan menjadi orang medioker itu bukanlah suatu hal yang mengenakkan bagi orang lain."',
+
+        // Arsip motto lengkap (untuk referensi atau jika ingin diganti di masa depan)
+        'motto_archive' => [
+            '"Berhenti memikirkan masa lalu yang kelam. Hidupku memang sering sial, penuh rentetan kegagalan, tetapi disitu saya teruslah giat dan belajar buat berproses menjadi sosok yang lebih baik. Karena yang sulit tidak akan ada yang sulit."',
+            '"Kalau kita hanya bisa dekat sebentar saja sama orang lain yang tidak ada hubungannya sama kita berarti jangan pikirin orang lain. Melihatnya ke masa depan aja. Allah memberi Anda hadiah 86.400 detik setiap hari, bisa dekat sedetik sama orang lain itu rezeki. Orang lain mau berteman sama kita kan ngalir aja bagaikan air mengalir."',
+            '"Mencoba mengubah diri menjadi introvert berkualitas daripada menjadi introvert medioker atau lembek. Karena jujur saya pribadi, saya masih tergolong medioker dan menjadi orang medioker itu bukanlah suatu hal yang mengenakkan bagi orang lain."',
+            '"Sedia apel emas dan totem sebelum pergi ke neraka ibaratkan sedia jas hujan sebelum hujan. Sembayang, ingat neraka ingat kematian ingat Allah ingat ajal bisa datang kapan saja walau kita masih muda, masih duduk santai. Ingatlah sholat."',
+            '"Semoga dari 8 miliar penduduk bumi bisa menjadi manusia yang paling baik hati dan semuanya meneladani teman kelas saya seperti Qurrota A\'yun Liulinuha dan Rasulullah Muhammad saw."',
+            '"Jika saya menganggur, maka setiap hari adalah hari libur. Uwenakkke polll. Tapi soal nyari duit itu gimana? Emang duit datang dari langit? Ya udah fokus ke cita cita ya."',
+        ],
+
+        // Nama "-Ari Eka Putragani" SENGAJA TIDAK disimpan di sini.
+        // Semua motto sudah ditutup tanda kutip, jadi nama pengarang ditulis SEKALI
+        // di view (resources/views/home.blade.php) sebagai baris baru
+        // setelah <br> - bukan ditulis ulang manual di tiap motto.
+        // Kalau suatu saat nama pengarang berubah, cukup ubah di satu tempat.
+
+        // Dipakai resources/views/tentang.blade.php (chip teknologi).
         'tech' => ['Laravel', 'PHP', 'JavaScript', 'Bootstrap', 'Next.js'],
     ],
     'socials' => [
-        'github' => env('PORTFOLIO_GITHUB', 'https://github.com/username'),
-        'linkedin' => env('PORTFOLIO_LINKEDIN', 'https://linkedin.com/in/username'),
+        'github' => env('PORTFOLIO_GITHUB', 'https://github.com/ariekaputragani'),
+        'linkedin' => env('PORTFOLIO_LINKEDIN', 'https://linkedin.com/in/ariekaputragani'),
         'twitter' => env('PORTFOLIO_TWITTER', 'https://twitter.com/username'),
-        'instagram' => env('PORTFOLIO_INSTAGRAM', 'https://instagram.com/username'),
+        'instagram' => env('PORTFOLIO_INSTAGRAM', 'https://instagram.com/arieka622'),
     ],
     'nav' => [
         ['label' => 'Beranda', 'href' => '/', 'icon' => 'fa-solid fa-house'],
         ['label' => 'Tentang', 'href' => '/tentang', 'icon' => 'fa-solid fa-user'],
-        ['label' => 'Proyek', 'href' => '/proyek', 'icon' => 'fa-solid fa-code'],
         ['label' => 'Layanan', 'href' => '/layanan', 'icon' => 'fa-solid fa-cubes'],
+        ['label' => 'Proyek', 'href' => '/proyek', 'icon' => 'fa-solid fa-code'],
         ['label' => 'Blog', 'href' => '/blog', 'icon' => 'fa-solid fa-newspaper'],
         ['label' => 'Kontak', 'href' => '/kontak', 'icon' => 'fa-solid fa-envelope'],
     ],
@@ -236,7 +256,12 @@ return [
             'hero.halo' => 'I am',
             'hero.role_prefix' => 'a',
             'hero.role' => 'Full-stack Web Developer',
-            'hero.intro' => 'I build fast, modern, and easy-to-use web experiences — from landing pages to complex applications.',
+            // 'hero.intro' SENGAJA TIDAK ADA.
+            // Isi hero sudah diganti motto acak (config('portfolio.hero.intro'),
+            // lihat resources/views/home.blade.php) dan motto itu proza Indonesia
+            // yang tidak diterjemahkan. Kalau key ini masih ada DAN elemen hero
+            // masih punya data-t="hero.intro", translate.js akan menimpa motto
+            // dengan kalimat generic ini begitu DOMContentLoaded.
             'hero.cta_proyek' => 'View Projects',
             'hero.cta_kontak' => 'Contact Me',
             'carousel.proyek' => 'My Projects',

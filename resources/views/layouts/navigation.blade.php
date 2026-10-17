@@ -1,4 +1,24 @@
-﻿<nav class="navbar navbar-expand-lg sticky-top pt-2 pb-0">
+@php
+    $path = request()->path() == '' ? '/' : '/' . request()->path();
+
+    // Section navbar yang SEDANG menutupi navbar waktu scroll 0.
+    //
+    // Halaman utama (/) punya <section class="pf-fixed-background hero">
+    // yang menutupi 100vh pertama, jadi palet yang benar sebelum JS jalan
+    // adalah palet "hero". Halaman lain TIDAK punya <section> seperti itu
+    // (pakai <div class="pf-fixed-background">), jadi navbar mereka tetap
+    // memakai --navbar-bg-default (teal).
+    //
+    // Atribut ini harus ada di HTML, bukan dipasang JS: kalau JS yang
+    // memasang, navbar akan tampil dengan warna default dulu (teal +
+    // teks putih) lalu melompat ke warna section begitu DOMContentLoaded —
+    // itu kedip navbar yang kelihatan saat page load. Dengan atributnya
+    // sudah ada, CSS resolve palet yang benar sejak frame pertama dan
+    // JS cuma mengIKUTI (nilai yang ditulisnya sama persis).
+    $initialSection = request()->routeIs('home') ? 'hero' : null;
+@endphp
+<nav class="navbar navbar-expand-lg sticky-top pt-2 pb-0"
+    @if($initialSection) data-pf-section="{{ $initialSection }}" @endif>
     <div class="container d-flex align-items-center" id="navContainer">
         <button class="sh-btn-circle d-lg-none collapsed" type="button" data-bs-toggle="collapse"
             data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Buka navigasi">
@@ -9,7 +29,6 @@
             </span>
         </button>
         <div class="collapse navbar-collapse" id="mainNavbar">
-            @php $path = request()->path() == '' ? '/' : '/' . request()->path(); @endphp
             <div class="sh-nav-group-wrapper" id="navGroupWrapper">
                 <div class="sh-nav-capsule me-auto d-inline-flex align-items-center gap-2" id="navbarMenu">
                     @foreach(config('portfolio.nav') as $item)
@@ -258,6 +277,7 @@
                 if (!surfaceCache) {
                     surfaceCache = document.querySelectorAll(
                         ".sh-nav-capsule, .sh-btn-circle, .sh-btn-contact, #mainNavbar, " +
+                        ".sh-nav-item, " +
                         ".sh-nav-item > span, .sh-nav-item > i, .lang-label, " +
                         "#lang-toggle .sh-nav-icon, .sh-btn-contact > span, " +
                         ".sh-btn-contact > i, .sh-hamburger-line"
@@ -371,6 +391,48 @@
                     : "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + c.a + ")";
             }
 
+            // ------------------------------------------------------------
+            // Versi HEX SOLID dari sebuah warna: komponen RGB dipakai
+            // apa adanya, alpha dipaksa menjadi 1 (tidak ada transparansi).
+            //
+            // Dipakai HANYA untuk state :hover di navbar desktop. Palet
+            // section menuliskan --navbar-bg sebagai rgba(..., 0.8) supaya
+            // navbar tetap tembus pandang saat tidak di-hover. Kalau warna
+            // yang sama dipakai mentah-mentah untuk TEKS hover, teksnya
+            // ikut jadi semi-transparan dan bercampur dengan warna di
+            // belakangnya — terlihatwashed out. Warna hover teks karena
+            // itu ditulis ulang di sini sebagai hex penuh: warnanya
+            // (hue/saturation) tidak berubah, hanya opasitasnya jadi 100%.
+            //
+            // State TIDAK hover tetap memakai rgba(..., 0.8) asli — nilai
+            // itu tidak pernah disentuh fungsi ini.
+            // ------------------------------------------------------------
+            function tintToSolidCss(c) {
+                function hex(v) {
+                    var s = Math.max(0, Math.min(255, Math.round(v))).toString(16);
+                    return s.length < 2 ? "0" + s : s;
+                }
+                return "#" + hex(c.r) + hex(c.g) + hex(c.b);
+            }
+
+            // Salin sebuah warna dengan alpha DIPAKSA menjadi nilai tertentu.
+            // Dipakai untuk background hover tombol EN / "Hubungi Saya":
+            // palet memberi --navbar-color sebagai hex penuh (mis.
+            // #FFE5CF), dan di sini diturunkan ke rgba(..., 0.8) supaya
+            // tombol hover ikut semi-transparan seperti navbar di
+            // sekitarnya — tidak terlihat lebih "padat" sendiri.
+            //
+            // RGB tidak diubah sama sekali, jadi warna yang tampil tetap
+            // persis sama, hanya opasitasnya 100% -> 80%.
+            function capAlpha(c, a) {
+                return {
+                    r: c.r,
+                    g: c.g,
+                    b: c.b,
+                    a: a
+                };
+            }
+
             // ---- Warna teks & warna hover ---------------------------
             //
             // Palet section punya dua warna per section (lihat CSS):
@@ -435,10 +497,14 @@
 
                 $nav[0].style.removeProperty("--pf-tint-a");
                 $nav[0].style.removeProperty("--pf-tint-b");
+                $nav[0].style.removeProperty("--pf-tint-solid-a");
+                $nav[0].style.removeProperty("--pf-tint-solid-b");
                 $nav[0].style.removeProperty("--pf-nav-tint-a");
                 $nav[0].style.removeProperty("--pf-nav-tint-b");
                 $nav[0].style.removeProperty("--pf-nav-hover-bg");
                 $nav[0].style.removeProperty("--pf-nav-hover-fg");
+                $nav[0].style.removeProperty("--pf-menu-bg");
+                $nav[0].style.removeProperty("--pf-menu-color");
                 $nav.removeAttr("data-pf-section");
 
                 lastTintA = lastTintB = null;
@@ -464,6 +530,14 @@
                     $nav[0].style.setProperty("--pf-tint-a", tintToCss(entryA.bg));
                     $nav[0].style.setProperty("--pf-tint-b", tintToCss(entryB.bg));
 
+                    // Versi SOLID dari warna background section yang sama
+                    // (alpha dipaksa 1, RGB tidak berubah). Dipakai HANYA
+                    // oleh state :hover di navbar desktop — lihat
+                    // tintToSolidCss() di atas. State normal tetap memakai
+                    // --pf-tint-a/b yang masih rgba(..., 0.8).
+                    $nav[0].style.setProperty("--pf-tint-solid-a", tintToSolidCss(entryA.bg));
+                    $nav[0].style.setProperty("--pf-tint-solid-b", tintToSolidCss(entryB.bg));
+
                     // Warna TEKS state normal = --navbar-color, juga dipotong
                     // di garis batas yang sama. Dipakai lewat `background-clip:
                     // text`, jadi --pf-split-y di elemen teks ikut dihitung JS.
@@ -472,8 +546,27 @@
 
                     // Hover tombol EN & "Hubungi Saya": background ditukar ke
                     // --navbar-color section aktif, teksnya ke --navbar-bg.
-                    $nav[0].style.setProperty("--pf-nav-hover-bg", tintToCss(entryB.color));
-                    $nav[0].style.setProperty("--pf-nav-hover-fg", tintToCss(entryB.bg));
+                    // Background hover ikut semi-transparan (alpha 0.8)
+                    // supaya tombol tidak terlihat lebih "padat" dibanding
+                    // navbar di sekitarnya. Teks hover tetap HEX SOLID
+                    // (alpha 1) — lihat tintToSolidCss().
+                    $nav[0].style.setProperty("--pf-nav-hover-bg", tintToCss(capAlpha(entryB.color, 0.8)));
+                    $nav[0].style.setProperty("--pf-nav-hover-fg", tintToSolidCss(entryB.bg));
+
+                    // Menu collapse mobile (overlay full screen saat terbuka):
+                    // SATU warna solid, bukan split.
+                    //
+                    // Memakai entryA, yaitu section yang menutupi PERMUKAAN navbar
+                    // (probe 0.5px dari tepi ATAS navbar, sama dengan `upper` di
+                    // updateSectionTint). Karena navbar sticky di atas,
+                    // pergantiannya terjadi tepat di tepi ATAS tiap section:
+                    // scroll 0 masih section 1, begitu lewat 911px (titik atas
+                    // section 2) langsung ikut section 2 - bukan di garis tengah.
+                    //
+                    // --pf-menu-bg untuk background overlay & tombol,
+                    // --pf-menu-color untuk ikon + teks di dalamnya.
+                    $nav[0].style.setProperty("--pf-menu-bg", tintToCss(entryA.bg));
+                    $nav[0].style.setProperty("--pf-menu-color", tintToCss(entryA.color));
 
                     // Section yang menutupi bagian bawah navbar; dipakai untuk
                     // debugging dan styling tambahan.
@@ -586,6 +679,38 @@
                     $nav.toggleClass("navbar-scrolled", scrolled);
                     $nav.attr("data-scroll-state", scrolled ? "scrolled" : "top");
 
+                    // ---------------------------------------------------------
+                    // Matikan transisi `color` TANPA SILANG saat user sedang
+                    // scroll (dan nyalakan lagi 150ms setelah scroll berhenti).
+                    //
+                    // Latar: tanda silang (`.sh-btn-circle.d-lg-none`) memakai
+                    // `color: var(--pf-menu-color) !important` supaya sinkron
+                    // dengan item menu. Nilai itu ditulis JS di
+                    // applySplit() setiap kali section berganti - jadi saat
+                    // scroll, `color` benar-benar berubah dan AKAN ikut
+                    // bertransisi 0.35s kalau transisinya nyala. Akibatnya
+                    // warna X "menyusul" section yang sudah berganti, dan
+                    // tidak sinkron dengan item menu (item menu tidak punya
+                    // transisi color).
+                    //
+                    // Hover, sebaliknya, HARUS mulus dua arah (masuk dan
+                    // keluar) seperti di situs live. Karena color dipakai
+                    // oleh dua hal berbeda (hover = halus, scroll = instan)
+                    // dan keduanya tidak bisa dibedakan lewat CSS, jadi
+                    // pemisahnya dilakukan di sini lewat atribut ini.
+                    //
+                    // CSS-nya ada di blok `.navbar:not([data-scrolling])`
+                    // (lihat public/css/portfolio.css). Atribut ini hanya
+                    // dipasang saat scroll benar-benar terjadi, sehingga
+                    // hover di luar scroll tetap mulus.
+                    // ---------------------------------------------------------
+                    var scrolling = window.__pfScrolling === true;
+                    if (scrolling) {
+                        $nav.attr("data-scrolling", "1");
+                    } else {
+                        $nav.removeAttr("data-scrolling");
+                    }
+
                     updateSectionTint($nav);
                 } catch (e) {
                     if (window.console) console.warn("Navbar scroll-state error:", e);
@@ -594,6 +719,36 @@
 
             // Scroll memunculkan banyak event; cukup satu kali per frame.
             var stateQueued = false;
+
+            // Pendantai scroll: `window.__pfScrolling` dibaca di
+            // updateNavbarState() untuk memasang/melepas atribut
+            // `data-scrolling` pada .navbar (lihat komentar di sana).
+            //
+            // selama scroll: flag = true  -> transisi `color` tanda silang
+            //   dimatikan, jadi warna section ganti INSTAN dan sinkron
+            //   dengan item menu.
+            // 150ms setelah scroll berhenti: flag = false -> transisi
+            //   `color` dinyalakan lagi, jadi hover masuk/keluar tetap mulus.
+            //
+            // Jeda 150ms disengaja: transisi hover berlangsung 350ms, jadi
+            // nilainya harus kembali normal sebelum user sempat hover lagi.
+            var scrollIdleTimer = null;
+            var SCROLL_IDLE_MS = 150;
+
+            function markScrolling() {
+                window.__pfScrolling = true;
+
+                if (scrollIdleTimer) {
+                    clearTimeout(scrollIdleTimer);
+                }
+
+                scrollIdleTimer = setTimeout(function () {
+                    window.__pfScrolling = false;
+                    scrollIdleTimer = null;
+                    // Paksa satu pembaruan supaya atribut langsung dilepas.
+                    updateNavbarState();
+                }, SCROLL_IDLE_MS);
+            }
 
             function queueNavbarState() {
                 if (stateQueued) return;
@@ -611,8 +766,20 @@
                 }
             }
 
-            $(window).on("scroll resize", queueNavbarState);
-            $(document).on("scroll", queueNavbarState);
+            // Hanya event scroll yang menandai "sedang scroll". Event
+            // `resize` sengaja tidak: mengubah ukuran window bukan
+            // pergerakan scroll, jadi transisi color harus tetap hidup
+            // supaya hover setelah resize tetap mulus.
+            $(window).on("scroll", function () {
+                markScrolling();
+                queueNavbarState();
+            });
+            $(window).on("resize", queueNavbarState);
+            $(document).on("scroll", function () {
+                markScrolling();
+                queueNavbarState();
+            });
+            window.__pfScrolling = false;
             updateNavbarState();
 
             // Cache menyimpan elemen (bukan posisi), jadi tetap valid walau

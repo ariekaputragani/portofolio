@@ -1,8 +1,18 @@
-/* ===== Portfolio styles (adapted from portfolio-web Next.js theme) ===== */
+﻿/* ===== Portfolio styles (adapted from portfolio-web Next.js theme) ===== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
 :root {
+  /* Font UTAMA situs: judul, paragraf, navbar, tombol, daftar, footer.
+     Semua elemen yang tidak punya font-family sendiri mewarisi ini. */
+  --pf-font-main: 'Fairfax', ui-monospace, 'SFMono-Regular', 'Cascadia Mono',
+    'Roboto Mono', Menlo, Consolas, monospace;
+
+  /* Slot kompatibilitas untuk aturan yang masih menulis
+     `var(--bs-font-sans-serif)` (lihat .pf-scope di bawah). */
+  --bs-font-sans-serif: var(--pf-font-main);
+  --bs-font-serif: var(--pf-font-main);
+
   --font-poppins: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --brand-green: #198754;
   --brand-green-600: #146c43;
@@ -19,10 +29,12 @@
 }
 
 .text-gradient {
-  background: linear-gradient(120deg,
-      var(--brand-green, #3ddc84),
-      var(--brand-blue, #6fa8ff),
-      var(--brand-yellow, #ffd54d));
+  background: linear-gradient(45deg,
+      #FEDA75,
+      #FA7E1E,
+      #D62976,
+      #962FBF,
+      #4F5BD5);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -73,17 +85,8 @@
   color: var(--bs-body-color);
 }
 
-.hero .hero-card {
-  background-color: var(--navbar-bg, rgba(13, 17, 23, 0.8));
-  border: 8px solid var(--border-soft, rgba(255, 255, 255, 0.1));
-  border-radius: 40px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
 @media (min-width: 992px) {
-  .hero .hero-avatar-col {
+  .hero-avatar-col {
     align-self: stretch;
     display: flex;
     align-items: center;
@@ -91,40 +94,18 @@
   }
 }
 
-/* Analog Clock (Exact design match to Image 1, transparent background) */
-.clock {
-  width: 280px;
-  height: 280px;
-  max-width: 100%;
-  margin: 0 auto;
-  position: relative;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.clock .analog-clock-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
-}
-
-.hero .hero-eyebrow {
-  color: var(--brand-green);
+.hero-eyebrow {
+  color: #231937;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-weight: 700;
   font-size: 0.85rem;
   margin-bottom: 0.5rem;
-  font-family: var(--bs-font-sans-serif, system-ui, -apple-system, sans-serif);
+  font-family: var(--pf-font-main);
 }
 
-.hero .hero-title {
+.hero-title {
   font-size: clamp(2.6rem, 6vw, 4.2rem);
-  font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.25;
   height: 1.25em;
@@ -137,10 +118,12 @@
 }
 
 .hero .text-gradient {
-  background: linear-gradient(120deg,
-      var(--brand-green),
-      var(--brand-blue),
-      var(--brand-yellow));
+  background: linear-gradient(45deg,
+      #FEDA75,
+      #FA7E1E,
+      #D62976,
+      #962FBF,
+      #4F5BD5);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -149,58 +132,70 @@
   overflow: visible !important;
 }
 
-.hero .hero-role {
+/* ------------------------------------------------------------
+   Sembunyikan nama SEBELUM typewriter.js siap, supaya tidak kedip.
+
+   Server sudah merender nama lengkap di dalam
+   <span class="text-gradient typing-name">, jadi browser mengecat
+   "Ari Eka Putragani" penuh. typewriter.js baru jalan di
+   DOMContentLoaded - yang ditunda script defer (js/app.js), jadi ada
+   jeda sekitar 1 detik. Ketika JS akhirnya jalan, ia langsung mengetik
+   dari "A", jadi nama lengkap yang sudah tampil MENYUSUT jadi satu
+   huruf dalam ~60ms lalu diketik ulang dari awal. Itulah kedipnya.
+
+   Solusinya bukan mengosongkan teks (itu bikin nama hilang dulu dan
+   layout bergeser), tapi menyembunyikannya dengan `visibility: hidden`:
+
+     - ruang tetap, jadi TIDAK ada layout shift,
+     - glifnya tidak terlihat sama sekali, jadi tidak bisa menyusut,
+     - kelasnya dipasang <script> inline yang jalan saat parse, jadi
+       sebelum frame pertama di-paint.
+
+   Kalau JS dimatikan, <script> inline itu tidak pernah jalan, kelas
+   tidak pernah dipasang, dan nama tetap tampil normal.
+
+   Dilepas oleh typewriter.js tepat sebelum mulai mengetik (lihat
+   public/js/typewriter.js). Ada juga jaring pengaman setTimeout 3 detik
+   di <script> inline, supaya nama tidak hilang permanen kalau
+   typewriter.js gagal dimuat.
+   ------------------------------------------------------------ */
+.text-gradient.typing-name-pending {
+  visibility: hidden;
+}
+
+.hero-role {
   font-size: 1.45rem;
-  color: var(--brand-blue);
+  color: #231937;
   font-weight: 600;
-  font-family: var(--bs-font-sans-serif, system-ui, -apple-system, sans-serif);
+  font-family: var(--pf-font-main);
 }
 
-.hero .hero-intro {
-  color: var(--bs-secondary-color);
-  font-size: 1.1rem;
-  max-width: 34rem;
-}
-
-.hero .book-btn {
+.project-btn {
   --bs-btn-color: #fff;
-  --bs-btn-bg: var(--brand-green);
-  --bs-btn-border-color: var(--brand-green);
-  --bs-btn-hover-color: #111;
-  --bs-btn-hover-bg: var(--brand-yellow);
-  --bs-btn-hover-border-color: var(--brand-yellow);
-  --bs-btn-active-color: #111;
-  --bs-btn-active-bg: var(--brand-yellow);
-  --bs-btn-active-border-color: var(--brand-yellow);
-  --bs-btn-focus-shadow-rgb: 25, 135, 84;
+  --bs-btn-bg: #231937;
+  --bs-btn-border-color: #231937;
+  --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: #ffca2c;
+  --bs-btn-hover-border-color: #ffc720;
+  --bs-btn-focus-shadow-rgb: 217, 164, 6;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: #ffcd39;
+  --bs-btn-active-border-color: #ffc720;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   font-weight: 600;
-  border-radius: 999px;
 }
 
-.hero .chip {
-  display: inline-block;
-  padding: 0.28rem 0.8rem;
-  margin: 0 0.5rem 0.5rem 0;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  background: var(--brand-green-light);
-  color: var(--brand-green);
-  border: 1px solid var(--border-soft);
-  font-family: var(--bs-font-sans-serif, system-ui, -apple-system, sans-serif);
+/* Lindungi .project-btn agar saat mendapat fokus (:focus) setelah diklik
+   dan kursor mouse menjauh (unhover), warnanya tidak dipaksa jadi hitam (#212529)
+   oleh aturan global `a:focus` di style.css, melainkan kembali ke inherit.
+   Saat di-hover kembali dalam keadaan fokus, tetap gunakan warna teks gelap (#000)
+   karena background berubah jadi kuning. */
+.project-btn:focus {
+  color: inherit;
 }
 
-.hero .avatar-ring {
-  background: linear-gradient(135deg, var(--brand-green), var(--brand-blue), var(--brand-yellow));
-  padding: 8px;
-  /* Rounded rectangle (bukan circle) sesuai permintaan */
-  border-radius: 1.5rem;
-  box-shadow: 0 22px 55px rgba(25, 135, 84, 0.25);
-  display: inline-block;
-}
-
-.hero .avatar-ring img {
-  display: block;
-  object-fit: cover;
+.project-btn:focus:hover {
+  color: #000;
 }
 
 /* S19 Gamer Avatar Frame Overlay (Original File - Full 320px Photo Size) */
@@ -327,7 +322,7 @@
   opacity: 1;
   animation: typedBlink 0.7s infinite;
   margin-left: 2px;
-  color: var(--brand-green, #3ddc84);
+  color: #4f5bd5;
   font-weight: 400;
 }
 
@@ -375,11 +370,45 @@
 }
 
 .font-style-serif {
-  font-family: Georgia, 'Times New Roman', serif !important;
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
   line-height: 1.08 !important;
   font-style: normal !important;
+  font-optical-sizing: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Rotasi typewriter ke-4: Fairfax HD.
+   Weight 700 dan letter-spacing -0.02em mengikuti poppins & space.
+
+   CATATAN line-height: ketiga rotasi lama TIDAK seragam -
+   poppins 1, space 1.2, serif 1.08 - dan semuanya menimpa
+   .typing-name (line-height 1.25) karena sama-sama !important dan
+   bloknya lebih belakangan. Jadi tinggi baris nama memang sudah
+   berubah-ubah antar rotasi SEBELUM Fairfax ikut. Di sini dipakai
+   1.1 (antara serif dan space) - kalau nanti ketahuan bikin nama
+   meloncat saat berganti ke Fairfax, set ke salah satu nilai di atas
+   supaya konsisten, jangan addsatu nilai baru.
+
+   `text-rendering` sengaja TIDAK dipakai di sini: ketiga rotasi lain
+   memakainya, tapi pada font monospace OptimizeLegibility bisa
+   mengubah jarak antar huruf dan bikin teks tampak bergeser-geser
+   saat rotasi. Monospace sudah punya jarak tetap bawaannya.
+
+   Fairfax = monospace halfwidth (advance 0,5em). Karena itu rotasi ini
+   terlihat paling "datar" dari empatnya - huruf i dan W punya lebar
+   yang sama persis. Itu memang cirinya, bukan cacat. */
+.font-style-fairfax {
+  font-family: 'Fairfax', ui-monospace, 'SFMono-Regular', 'Cascadia Mono',
+    'Roboto Mono', Menlo, Consolas, monospace !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.1 !important;
+  font-style: normal !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
 }
 
 .typing-role {
@@ -427,8 +456,13 @@
   --bs-tertiary-bg: #1c222b;
   --bs-border-color: #2a3038;
 
-  /* Font body serif seperti ../portfolio (heading & teks) */
-  font-family: Georgia, 'Times New Roman', serif;
+  /* Font body: Fairfax HD (lihat blok @font-face di atas file ini).
+     Dulu Georgia, 'Times New Roman', serif. */
+  font-family: var(--pf-font-main);
+
+  /* Bootstrap memakai variabel ini untuk font body komponen.
+     Ditimpa ke Fairfax supaya heading, list, form, dan tabel ikut. */
+  --bs-body-font-family: var(--pf-font-main);
 }
 
 .pf-scope ::selection {
@@ -436,19 +470,21 @@
   color: #fff;
 }
 
-/* Sans-serif chrome (btn/chip/eyebrow) seperti ../portfolio */
+/* Chrome navbar: tombol, chip, eyebrow. Semua Fairfax sekarang juga. */
 .pf-scope .btn,
 .pf-scope .chip,
 .pf-scope .section-eyebrow,
 .pf-scope .hero-eyebrow {
-  font-family: var(--bs-font-sans-serif);
+  font-family: var(--pf-font-main);
 }
 
 .pf-scope .text-gradient {
-  background: linear-gradient(120deg,
-      var(--brand-green),
-      var(--brand-blue),
-      var(--brand-yellow));
+  background: linear-gradient(45deg,
+      #FEDA75,
+      #FA7E1E,
+      #D62976,
+      #962FBF,
+      #4F5BD5);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -473,7 +509,7 @@
 #demo {
   position: relative;
   z-index: 1;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--pf-font-main);
   /* Basis tipografi = 100% 2098_health (Bootstrap 3): body 14px,
      line-height 1.428571. Dikunci di sini agar nilai em/inherit pada
      h1, h3, dan .section-btn menghitung PERSIS seperti template asli
@@ -539,7 +575,7 @@
   border: 1px solid transparent;
   border-radius: 3px;
   color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--pf-font-main);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.428571429;
@@ -831,7 +867,7 @@
 /* ===== Tech Pipeline marquee ===== */
 .tp-section,
 .tp-section * {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  font-family: var(--pf-font-main) !important;
 }
 
 .tp-section {
@@ -1351,9 +1387,16 @@
   --brand-yellow: #ffd54d;
 
   /* Warna default (halaman tanpa section ber-warna, mis. /proyek, /kontak).
-     Section halaman utama menimpanya lewat [data-pf-section] di bawah. */
+     Section halaman utama menimpanya lewat [data-pf-section] di bawah.
+
+     `--navbar-color` juga diberi nilai default karena dipakai oleh
+     `--pf-nav-tint-a/b` dan `--pf-menu-color` di bawah — tanpa ini,
+     var(--navbar-color) jadi "guaranteed-invalid" di halaman tanpa section
+     dan kedua var itu ikut jadi tidak sah. */
   --navbar-bg-default: rgba(32, 178, 170, 0.8);
+  --navbar-color-default: #ffffff;
   --navbar-bg: var(--navbar-bg-default);
+  --navbar-color: var(--navbar-color-default);
 
   /* ---- Split di garis batas section -------------------------------
      Navbar TIDAK memakai satu warna polos. Ia memakai gradient dua warna
@@ -1388,6 +1431,12 @@
      jarak, mis. `calc(var(--pf-split-y) - 3px)`. */
   --pf-tint-a: var(--navbar-bg);
   --pf-tint-b: var(--navbar-bg);
+  /* Versi SOLID dari --pf-tint-a/b: RGB sama, alpha dipaksa 1. Dipakai
+     HANYA oleh state :hover di navbar desktop, supaya teks hover tidak
+     ikut semi-transparan seperti background normal. Ditimpa JS per section
+     (lihat applySplit di navigation.blade.php). */
+  --pf-tint-solid-a: #20b2aa;
+  --pf-tint-solid-b: #20b2aa;
   --pf-split-y: 99999px;
 
   /* ---- Warna TEKS navbar & warna hover -----------------------------
@@ -1407,17 +1456,45 @@
 
      `--pf-nav-hover-bg`   = background tombol EN / "Hubungi Saya" saat
                               hover. Datanya `--navbar-color` section yang
-                              sedang aktif: hover menukar background dan
-                              color, jadi background berubah jadi "color"
-                              dan teksnya jadi "--navbar-bg".
-     `--pf-nav-hover-fg`   = teks saat hover, nilainya `--navbar-bg`.
+                              sedang aktif, DITURUNKAN ke alpha 0.8 lewat
+                              capAlpha() (navigation.blade.php) supaya tombol
+                              hover ikut semi-transparan seperti navbar di
+                              sekitarnya — tidak terlihat lebih "padat".
+                              Hover menukar background dan color: background
+                              berubah jadi "--navbar-color", teksnya jadi
+                              "--navbar-bg".
+     `--pf-nav-hover-fg`   = teks saat hover, nilainya `--navbar-bg` tapi ditulis
+                              sebagai HEX SOLID (alpha 1). Palet menyediakan
+                              `--navbar-bg` sebagai rgba(..., 0.8) supaya navbar
+                              tembus pandang saat tidak di-hover; warna TEKS tidak
+                              boleh ikut semi-transparan karena akan bercampur dengan
+                              warna terang di belakangnya. RGB-nya sama persis,
+                              hanya opasitasnya jadi 100%. Ditimpa JS lewat
+                              tintToSolidCss() (navigation.blade.php).
 
      Nilai di bawah dipakai halaman tanpa section (/proyek, /kontak, ...);
-     di halaman utama JS menimpanya per section. */
-  --pf-nav-tint-a: #ffffff;
-  --pf-nav-tint-b: #ffffff;
-  --pf-nav-hover-bg: #ffffff;
+     di halaman utama JS menimpanya per section.
+
+     PENTING — `--pf-nav-tint-a/b` harus menunjuk ke `var(--navbar-color)`,
+     BUKAN hex tetap. Section-nya sudah ditulis server-side lewat
+     atribut `data-pf-section` (lihat navigation.blade.php), jadi waktu
+     `--navbar-color` sudah benar sejak frame pertama. Kalau nilai teksnya
+     ditulis mati di sini (#ffffff), navbar akan tampil teal + teks putih
+     dulu, lalu JS menimpanya jadi indigo + #FFE5CF begitu DOMContentLoaded
+     — itu kedip navbar saat page load. Dengan var(),pra-paint dan
+     pasca-JS identik. */
+  --pf-nav-tint-a: var(--navbar-color);
+  --pf-nav-tint-b: var(--navbar-color);
+  --pf-nav-hover-bg: rgba(255, 255, 255, 0.8);
   --pf-nav-hover-fg: #0f5f59;
+
+  /* Menu collapse mobile saat terbuka: SATU warna solid, bukan split.
+     Ditimpa JS tiap section (lihat applySplit di navigation.blade.php)
+     dengan section yang menutupi tepi ATAS navbar, jadi warnanya
+     berganti tepat di tepi atas tiap section. Nilai di bawah hanya
+     fallback untuk halaman tanpa section. */
+  --pf-menu-bg: var(--navbar-bg);
+  --pf-menu-color: var(--navbar-color);
 
   --border-soft: rgba(255, 255, 255, 0.15);
 
@@ -1568,20 +1645,6 @@
 
 .navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
-
-.navbar .book-btn {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: var(--brand-green);
-  --bs-btn-border-color: var(--brand-green);
-  --bs-btn-hover-color: #111;
-  --bs-btn-hover-bg: var(--brand-yellow);
-  --bs-btn-hover-border-color: var(--brand-yellow);
-  --bs-btn-active-color: #111;
-  --bs-btn-active-bg: var(--brand-yellow);
-  --bs-btn-active-border-color: var(--brand-yellow);
-  font-weight: 600;
-  border-radius: 999px;
 }
 
 .navbar .lang-btn {
@@ -1818,6 +1881,27 @@
   background-image: none;
 }
 
+/* ------------------------------------------------------------
+   Garis hamburger saat hover ikut ter-split, sama seperti tombol EN
+   dan "Hubungi Saya". Di atas memakai --pf-tint-a, di bawah
+   --pf-tint-b, dipotong tepat di garis batas section. Garis ini
+   "teks"-nya tombol, jadi memakai warna BACKGROUND section
+   (--pf-tint-*), sama seperti teks tombol lain saat hover.
+
+   Hanya untuk state MENU TERTUTUP. Tanda silang (menu terbuka)
+   sengaja dikecualikan: selector-nya bukan `aria-expanded="true"`
+   dan bukan `.menu-open`, sehingga garis silang tetap memakai
+   `currentColor` seperti sebelumnya (hijau di mobile).
+   ------------------------------------------------------------ */
+.sh-btn-circle[aria-expanded="false"]:hover .sh-hamburger-line {
+  background-image: linear-gradient(var(--pf-tint-solid-a), var(--pf-tint-solid-a)),
+    linear-gradient(var(--pf-tint-solid-b), var(--pf-tint-solid-b));
+  background-origin: border-box, border-box;
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, left bottom;
+  background-size: 100% var(--pf-split-y), 100% calc(100% - var(--pf-split-y));
+}
+
 /* Tombol collapse transparan & tanpa border/shadow/outline saat menu open */
 .sh-btn-circle[aria-expanded="true"],
 .menu-open .sh-btn-circle,
@@ -1878,9 +1962,21 @@
 /* Overlay hover untuk tombol EN & "Hubungi Saya". Dipakai ::before (bukan
    background-color) karena background-image tidak bisa di-transition: dengan
    ::before + opacity, pertukaran warnanya benar-benar cross-fade mulus, dan
-   gradient split tetap ikut terkedip ikut teksnya. Warnanya --pf-nav-hover-bg
-   (= --navbar-color section aktif), bukan putih, supaya yang ditukar memang
-   background <-> color seperti yang diminta. */
+   gradient split tetap ikut terkedip ikut teksnya.
+
+   Warnanya dipecah dua warna solid tepat di garis batas section:
+   bagian atas memakai --pf-nav-tint-a (warna teks section di atas),
+   bagian bawah --pf-nav-tint-b. Effek invert tetap sama seperti
+   sebelumnya (background <- warna teks section), cuma sekarang ikut
+   ter-split seperti warna teks navbar.
+
+   Tiap lapisan background hanya berisi SATU warna, jadi tidak ada
+   isian yang "mengandung" warna yang lain. `background-origin`/
+   `clip` border-box supaya --pf-split-y terukur dari tepi yang sama
+   dengan yang dipakai surface lain.
+
+   --pf-split-y di-inherit dari tombolnya sendiri, yang sudah
+   didaftarkan di getSplitSurfaces() (navigation.blade.php). */
 .sh-btn-circle::before,
 .sh-btn-contact::before {
   content: "";
@@ -1888,7 +1984,12 @@
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  background: var(--pf-nav-hover-bg);
+  background-image: linear-gradient(var(--pf-nav-tint-a), var(--pf-nav-tint-a)),
+    linear-gradient(var(--pf-nav-tint-b), var(--pf-nav-tint-b));
+  background-origin: border-box, border-box;
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, left bottom;
+  background-size: 100% var(--pf-split-y), 100% calc(100% - var(--pf-split-y));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1946,12 +2047,32 @@
    background (--pf-nav-hover-fg). Mode split dimatikan supaya teks
    kembali pakai `color` biasa, karena `color` bisa di-transition mulus
    sedangkan `background-image` tidak. */
+/* Hover tombol EN / "Hubungi Saya": warnanya ditukar - background jadi
+   warna teks (lewat ::before) dan teks jadi warna background. Effek
+   invert-nya tetap, hanya sekarang ikut ter-split di garis batas
+   section: di atas memakai --pf-tint-solid-a (warna background section
+   atas), di bawah --pf-tint-solid-b. `background-clip: text` tetap aktif
+   dari aturan state normal, jadi yang tampil gradasi yang terpotong.
+
+   Kenapa pakai --pf-tint-SOLID-*, bukan --pf-tint-* biasa: palet
+   section menulis --navbar-bg sebagai rgba(..., 0.8). Warna background
+   section memang perlu semi-transparan (navbar harus tembus pandang),
+   tapi warna TEKS tidak — kalau teks hover juga ikut alpha 0.8, dia bercampur
+   dengan warna terang di belakangnya dan terlihat washed out. Di sini
+   RGB-nya sama persis, hanya alpha-nya dipaksa 1.
+
+   State TIDAK hover tetap memakai rgba(..., 0.8) asli. */
 #lang-toggle:hover .lang-label,
 #lang-toggle:hover .sh-nav-icon,
 .sh-btn-contact:hover>span,
 .sh-btn-contact:hover>i {
-  background-image: none;
-  color: var(--pf-nav-hover-fg);
+  background-image: linear-gradient(var(--pf-tint-solid-a), var(--pf-tint-solid-a)),
+    linear-gradient(var(--pf-tint-solid-b), var(--pf-tint-solid-b));
+  background-origin: border-box, border-box;
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, left bottom;
+  background-size: 100% var(--pf-split-y), 100% calc(100% - var(--pf-split-y));
+  color: transparent;
 }
 
 @media (max-width: 991.98px) {
@@ -2061,11 +2182,21 @@
     gap: 3.5rem !important;
   }
 
-  /* Main Navigation Menu Capsule & Controls (2 Kolom Grid Layout, gap 6rem) */
+  /* Main Navigation Menu Capsule & Controls (2 Kolom Grid Layout, gap 6rem)
+
+     `minmax(0, 1fr)` (bukan `1fr` polos) itu penting: tanpa ituLebar
+     track ikut LAMPAU ke isi sel, jadi grid ini jadi ikut bergerak
+     hanya karena isi satu tombol berubah. Contoh nyatanya: label
+     "EN" -> "ID" menambah 1 karakter, lebar tombol ikut membesar,
+     dan seluruh grid (menu items + tombol EN + tombol Hubungi)
+     ikut bergeser. Dengan `minmax(0, 1fr)` track selalu_lebar tetap
+     Independent dari isi, jadi kedua grid ini punya kolom yang PUNYA
+     IDENTIK dan tidak pernah saling bergeser.
+  */
   .sh-nav-capsule,
   #navControls {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
@@ -2079,6 +2210,14 @@
     gap: 3.5rem !important;
   }
 
+  /* Offset yang sama persis untuk kedua grid. `.sh-nav-capsule` punya
+     translateX(-1.25rem) di bawah (lihat blok "Shift 6 menu
+     buttons..."), dan #navControls harus ikut geser_amount yang sama
+     supaya kolom-kolomnya tetap sejajar satu sama lain. */
+  #navControls {
+    transform: translateX(-1.25rem) !important;
+  }
+
   /* Shift 6 menu buttons in mobile collapse navbar slightly to the left to align vertically with controls below */
   .sh-nav-capsule {
     transform: translateX(-1.25rem) !important;
@@ -2088,6 +2227,7 @@
   #navControls .lang-btn,
   #navControls .sh-btn-contact {
     width: 100% !important;
+    min-width: 0 !important;
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -2138,25 +2278,96 @@
   }
 
   /* ------------------------------------------------------------
-     Tombol EN & "Hubungi Saya" TIDAK boleh punya ::before di menu
-     mobile.
+     LEBAR KOLOM TETAP SAAT LABEL EN <-> ID BERGANTI.
 
-     ::before itu overlay hover versi desktop (tukar background <-> color).
-     Di sini tidak dipakai: hover-nya diambil dari blok di bawah
-     (background putih 15% + teks --brand-green), sama seperti
-     .sh-nav-item. Yang tersisa cuma `transition: opacity 0.35s` yang
-     ikut hidup setiap hover - dan itulah yang bikin warnanya kelihatan
-     kedip. Dulu overlay-nya ditahan pakai `opacity: 0 !important` di
-     blok state expanded, tapi itu cuma memadamkan: pseudo-element-nya
-     tetap ada dan tetap bereaksi.
+     Tombol EN/ID ikut `width: 100%` seperti tombol menu lain, tapi
+     labelnya berubah isinya. Kalau label itu boleh ia makan
+     seluruh lebar kolom, satu karakter beda sudah cukup mendorong
+     seluruh grid.
 
-     `content: none` mencabut pseudo-element-nya sekalian, jadi profil
-     transisinya benar-benar sama dengan .sh-nav-item - tidak ada
-     pseudo-element, tidak ada transisi opacity.
+     PERHATIAN: aturan min-width ini SUDAH DIHAPUS. Dulu dipakai
+     untuk mengunci label, tapi hanya membuat tombol EN/ID lebih
+     lebar dari desain aslinya. Kestabilan EN <-> ID sekarang
+     ditopang `justify-self: center` di bawah, yang jauh lebih
+     kuat: yang dipegang titik tengah, bukan lebar label. Karena
+     itu label bebas mengikuti lebar naturalnya lagi.
      ------------------------------------------------------------ */
-  #navControls .lang-btn::before,
-  #navControls .sh-btn-contact::before {
-    content: none !important;
+
+  /* ------------------------------------------------------------
+     LEBAR KOTAK HOVER ID/EN - SAMA DENGAN TOMBOL MENU DI ATASNYA.
+
+     Tombol ID/EN memakai lebar kolom penuh, sama persis dengan
+     tombol menu lainnya. Nilai `100%` merujuk ke LEBAR grid track,
+     bukan ke lebar isi, jadi otomatis ikut di viewport berapa pun.
+
+     `min-width: 0` (bukan `min-content`) supaya tidak ada elemen
+     yang memaksa lebar minimum - kalau `min-content`, lebarnya
+     balik ke lebar isi (label pendek atau ikon).
+
+     TOMBOL "HUBUNGI SAYA" SENGAJA TIDAK IKUT ATURAN `width` DI BAWAH
+     - kotaknya dibiarkan mengikuti lebar teksnya sendiri, tidak
+     diubah.
+
+     Alasannya: "Hubungi Saya" (~213px) memang lebih panjang dari
+     lebar kolom (~143px). Kalau dipaksa selebar kolom, teksnya
+     harus membungkus dua baris dan tombolnya jadi terlihat lebih
+     tinggi - itu mengubah tampilannya. Jadi dibiarkan natural
+     seperti aslinya.
+
+     Lebar mengikuti isi (`width: auto`) + `justify-self: center` dipakai supaya
+     TITIK TENGAH tombol tetap jatuh di tengah kolom meski
+     lebarnya mengikuti isi. Itu juga yang menjaga kestabilan saat
+     label "EN" <-> "ID" berganti - yang dipegang titik tengah,
+     bukan lebar.
+     ------------------------------------------------------------ */
+  #navControls .lang-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #navControls .sh-btn-contact {
+    width: auto !important;
+    max-width: none !important;
+    justify-self: center !important;
+    align-self: center !important;
+  }
+
+  /* ------------------------------------------------------------
+     "CONTACT ME" (English) - LEBIAR KOLOM, SAMA DENGAN TOMBOL
+     MENU LAINNYA.
+
+     Dua bahasa ini memakai elemen tombol yang SAMA, jadi lebar
+     kotaknya harus berbeda antara satu bahasa dan yang lain:
+
+       - "Hubungi Saya" (~213px) -> TETAP natural. Lebih panjang
+         dari lebar kolom (~143px), jadi kalau dipaksa selebar
+         kolom, teksnya harus membungkus dua baris dan tombolnya
+         ikut terlihat lebih tinggi. Itu yang membuat teksnya
+         nabrak pembatas hover, jadi dibiarkan apa adanya.
+
+       - "Contact Me" (~160px) -> SELEBAR KOLOM, sama persis
+         dengan tombol menu lainnya. Teksnya muat di satu baris
+         tanpa keluar kotak, jadi aman dibuat seragam.
+
+     `html[lang="en"]` dipakai sebagai penanda. translate.js
+     menuliskan atribut itu setiap kali bahasa diganti
+     (public/js/translate.js: `$("html").attr("lang", lang)`),
+     jadi nilainya selalu sesuai bahasa yang sedang aktif.
+
+     Selector ini harus tetap berada DI BAWAH aturan `width: auto`
+     di atas, supaya aturan dasar itu yang menang kalau selector
+     ini tidak cocok (mis. sebelum JS sempat jalan).
+     ------------------------------------------------------------ */
+  html[lang="en"] #navControls .sh-btn-contact {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    justify-self: stretch !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
   }
 
   .sh-nav-item:hover,
@@ -2190,6 +2401,19 @@
     transform: scale(1.1);
   }
 
+  /* Overlay ::before ikut dicabut di menu mobile. Itu sisa mekanisme
+     hover invert versi desktop; di sini hover-nya sudah diambil dari
+     blok `background: rgba(255, 255, 255, 0.15)` di atas, sama seperti
+     tombol menu biasa. Dicabutnya pseudo-element berarti
+     `transition: opacity 0.35s`-nya ikut hilang, jadi profil transisinya
+     benar-benar sama persis dengan .sh-nav-item yang memang tidak punya
+     ::before. Selector-nya memakai #navControls supaya tombol X close
+     (.sh-btn-circle di luar #navControls) tetap utuh. */
+  #navControls .lang-btn::before,
+  #navControls .sh-btn-contact::before {
+    content: none !important;
+  }
+
   /* Hover tombol collapse (tanda silang): background-nya sudah ditahan
      transparan oleh blok `::before` di luar media query ini, jadi di sini
      hanya warna yang ikut — dibuat PERSIS sama dengan hover tombol EN dan
@@ -2201,9 +2425,298 @@
     color: var(--brand-green, #3ddc84) !important;
   }
 
+  /* Background hover tanda silang SENGAJA dibiarkan apa adanya
+     (transparan) — hanya warnanya yang ikut, lewat aturan
+     `.sh-btn-circle:hover` di atas.
+
+     Transisi hover-nya (masuk & keluar) diatur di blok
+     ".navbar .sh-btn-circle.d-lg-none" di luar media query. */
+
+  /* ------------------------------------------------------------
+     PENGECUALIAN: tombol HAMBURGER (menu masih tertutup).
+
+     Tombol ini satu elemen sama dengan tanda silang - cuma beda
+     state, jadi aturan `!important` di atas otomatis mengenai
+     keduanya. Yang ini membetulkan HANYA state tertutup
+     (`aria-expanded="false"`) supaya warnanya sama persis dengan
+     hover tombol EN / "Hubungi Saya" di navbar desktop, yaitu
+     --pf-nav-hover-fg.
+
+     Kenapa perlu: hamburger adalah "teks"/garis yang diwarnai lewat
+     `background-color: currentColor` (lihat blok gradien split yang
+     dimatikan saat hover), jadi ia mewarisi `color` dari
+     `.sh-btn-circle:hover`. Tanpa aturan ini, garisnya hijau
+     (--brand-green) padahal hover tombol EN dan "Hubungi Saya"
+     di desktop gelap (--pf-nav-hover-fg) — terlihat tidak serasi.
+
+     Background hover-nya sudah otomatis sama: overlay `::before`
+     memakai --pf-nav-hover-bg dan opacity-nya naik ke 1 seperti
+     tombol EN / "Hubungi Saya", jadi tidak perlu disentuh di sini.
+
+     State TERBUKA (tanda silang) sengaja TIDAK ikut aturan ini,
+     karena selector-nya bukan `aria-expanded="true"` maupun
+     `.collapsed`. Jadi tanda silang benar-benar tidak tersentuh -
+     hover-nya tetap --brand-green seperti sebelumnya.
+
+     Ukuran, margin, padding, dan jarak tidak disentuh sama sekali.
+     ------------------------------------------------------------ */
+  .sh-btn-circle[aria-expanded="false"]:hover {
+    color: var(--pf-nav-hover-fg) !important;
+  }
+
   .sh-btn-circle {
     padding: 1.075rem 1.1375rem;
   }
+
+  /* ------------------------------------------------------------
+     MENU COLLAPSE MOBILE SAAT TERBUKA: satu warna solid.
+
+     Default-nya navbar (dan semua isinya) ikut ter-SPLIT di garis
+     batas section. Di dalam menu yang sudah menutupi layar penuh,
+     split itu tidak perlu: yang dipakai hanya section yang sedang
+     menutupi navbar, dengan batas di tepi ATAS tiap section.
+
+     Warna datang dari --pf-menu-bg / --pf-menu-color, yang ditulis
+     JS di applySplit() (navigation.blade.php) dari section yang
+     menutupi permukaan navbar. Jadi:
+       scroll 0          -> warna section 1
+       scroll >= 911px   -> warna section 2 (911 = tepi atas section 2)
+       dan seterusnya.
+
+     Ikon + teks dikembalikan ke `color` biasa (background-clip: text
+     dimatikan) supaya warna solid itu benar-benar 하나, bukan
+     gradient yang dipotong.
+
+     State HOVER dikecualikan lewat `:not(:hover)` pada TOMBOL-nya,
+     bukan pada glifnya: kursor sering berada di tengah tombol
+     (di antara ikon dan label), sehingga `span:hover` tidak pernah
+     true walau tombolnya di-hover. Karena begitu aturan ini otomatis
+     tidak berlaku saat hover, dan aturan hover yang sudah ada
+     (latar putih 15% + hijau --brand-green) tetap bekerja tanpa
+     perlu ditimpa manual.
+
+     Empat selector EN / "Hubungi Saya" sengaja memakai `#navControls`
+     (ada ID-nya), bukan hanya kelas: aturan `color: transparent
+     !important` di atas memakai ID itu juga, jadi kalau selektor ini
+     tanpa ID, ID theirs menang dan ikon/teks jadi tidak terlihat.
+
+     TIDAK ada transisi yang ditambahkan di sini: aturan transition
+     yang sudah ada di atas apa adanya.
+     ------------------------------------------------------------ */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .navbar-collapse {
+    background: var(--pf-menu-bg) !important;
+  }
+
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-nav-item:not(:hover)>span,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-nav-item:not(:hover)>i,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .lang-btn:not(:hover) .lang-label,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls #lang-toggle:not(:hover) .sh-nav-icon,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .sh-btn-contact:not(:hover)>span,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .sh-btn-contact:not(:hover)>i {
+    background-image: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    color: var(--pf-menu-color) !important;
+  }
+
+  /* ------------------------------------------------------------
+     TANDA SILANG (tombol close) - WARNA SAMA DENGAN ITEM MENU.
+
+     Tombol ini TIDAK ikut daftar di atas, padahal posisinya sama
+     (di dalam overlay menu). Akibatnya warnanya diambil dari
+     sumber yang BERBEDA: item menu memakai `--pf-menu-color`
+     (satu warna solid per section), sedangkan tanda silang masih
+     memakai warisan `--pf-nav-tint-b` yang dipecah di garis batas
+     section.
+
+     Konsekuensinya nyata dan terlihat: saat user scroll melewati
+     batas section, `--pf-nav-tint-b` berubah DULUAN, sedangkan
+     `--pf-menu-color` baru berubah beberapa puluh piksel kemudian.
+     Akibatnya tanda silang sempat berwarna beda dari item menu
+     selama belasan frame - persis keluhan "kadang warna tombol
+     silang tidak sama dengan menu item".
+
+     Dengan ikut memakai `--pf-menu-color`, keduanya berubah pada
+     frame yang sama karena membaca variabel yang sama, yang
+     ditulis JS di applySplit() (navigation.blade.php).
+
+     Tidak perlu `background-image: none` di sini: garis silang
+     berwarna lewat `background-color: currentColor`, jadi yang
+     menentukan warnanya tetap `color` tombolnya.
+
+     Hover dikecualikan (`:not(:hover)`) supaya hijau --brand-green
+     saat hover tidak tertimpa.
+     ------------------------------------------------------------ */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-circle.d-lg-none:not(:hover) {
+    color: var(--pf-menu-color) !important;
+  }
+
+  /* ------------------------------------------------------------
+     HAPUS TRANSISI WARNA SAAT SCROLL ANTAR SECTION.
+
+     Warna menu (--pf-menu-bg / --pf-menu-color) ditulis ulang JS
+     setiap kali kursor lewat tepi atas sebuah section. Sebelumnya
+     semua elemen di dalam menu masih punya `transition: color`
+     (atau `all`, yang memuatnya), jadi perpindahan warna itu ikut
+     ter-fade - warnanya mudah terlihat "menyusul" posisi scroll,
+     dan saat digeser cepat terlihat berkedip.
+
+     Yang dihapus HANYA transisi yang propertinya berubah karena
+     scroll: `color`, `background-color`, dan `all`.
+
+     Yang SENGAJA dipertahankan: `transform` dan `opacity`, karena
+     keduanya tidak mungkin berubah karena scroll - dipakai untuk
+     animasi buka/tutup menu (`#mainNavbar` opacity), morph garis
+     hamburger jadi tanda silang, dan `scale(1.1)` saat hover.
+
+     Catatan: `color` juga dipakai untuk hover tombol (putih 15% +
+     hijau), jadi hover pun sekarang langsung berpindah tanpa fade.
+     `transform` tetap mulus, jadi skala ikon masih halus.
+     ------------------------------------------------------------ */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)),
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navContainer,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .navbar-collapse,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-nav-group-wrapper,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navbarMenu,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-nav-item,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-nav-item>span,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-nav-item>i,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .lang-btn,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .lang-btn .lang-label,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls #lang-toggle .sh-nav-icon,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .sh-btn-contact,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .sh-btn-contact>span,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) #navControls .sh-btn-contact>i,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-circle .sh-hamburger-line {
+    transition-property: transform, opacity !important;
+    transition-duration: 0.35s !important;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  /* ------------------------------------------------------------
+     PENGECUALIAN: TOMBOL TANDA SILANG TIDAK IKUT "HAPUS
+     TRANSISI SAAT SCROLL" DI ATAS.
+
+     `.sh-btn-circle` sengaja TIDAK ada di daftar selector blok itu.
+     Alasannya: transisi `color` HARUS tetap hidup di tombol ini
+     supaya hover-nya (masuk maupun keluar) mulus seperti di situs
+     live.
+
+     Aman untuk scroll: yang berganti saat scroll adalah custom
+     property `--pf-menu-color`, bukan `color` langsung. Custom
+     property tidak dianimasikan, jadi warna section tetap ganti
+     seketika dan tetap sinkron dengan item menu.
+
+     Yang TIDAK ikut aturan ini: tombol translate (`.lang-btn`)
+     dan "Hubungi Saya" — keduanya bukan `.sh-btn-circle` murni
+     dan tidak punya `.d-lg-none`, jadi tidak tersentuh.
+     ------------------------------------------------------------ */
+}
+
+/* ------------------------------------------------------------
+     ANIMASI TRANSISI HOVER TANDA SILANG (masuk & keluar).
+
+     Di live, `color` bertransisi 0.35s dua arah: kursor masuk maupun
+     keluar, warnanya selalu mulus. Di lokal, aturan
+     `transition-property: transform, opacity` dari blok "HAPUS
+     TRANSISI SAAT SCROLL" ikut membuang `color` — sehingga warna
+     tanda silang LONCAT seketika dua arah.
+
+     Perbaikannya satu blok INI SAJA, di luar dan SESUDAH blok
+     scroll (lihat catatan urutan di bawah).
+
+     Yang dipulihkan persis seperti live:
+       - masuk hover  : warna section -> hijau, mulus 0.35s,
+       - keluar hover : hijau -> warna section, mulus 0.35s.
+
+     Urutan itu penting. Aturan dasar `transition: all 0.35s` di
+     bawah file (blok "Transisi CSS halus untuk semua elemen
+     navbar") sudah memberi `all`, termasuk `color`. Yang perlu
+     dilakukan hanya MENGGANTINYA di selector tanda silang
+     menjadi daftar yang sama seperti live, DAN menaruhnya
+     SESUDAH blok `transition: all` — kalau tidak, `all` yang
+     menang dan daftar live tidak berlaku.
+
+     `[data-scrolling]` dipasang JS (navigation.blade.php) selama
+     user benar-benar scroll, dan dilepas 150ms setelah scroll
+     berhenti. Saat atribut itu ada, transisi `color` dimatikan
+     lagi supaya:
+
+       - SCROLL  -> warna section ganti INSTAN, sinkron dengan item
+                    menu (item menu juga tidak punya transisi color),
+       - HOVER   -> di luar scroll, transisi hidup lagi, jadi masuk
+                    dan keluar sama mulusnya dengan live.
+
+     Scroll dan hover sama-sama mengubah `color`, dan CSS tidak
+     bisa membedakan keduanya — jadi pemisahnya sengaja
+     dilakukan di JS, bukan di sini.
+
+     Garis silang ikut mengikuti `color` tombolnya lewat
+     `background-color: currentColor`, tanpa transisi sendiri.
+     ------------------------------------------------------------ */
+.navbar .sh-btn-circle.d-lg-none {
+  transition-property: padding, margin, font-size, color, border-radius,
+    box-shadow, opacity, transform, backdrop-filter,
+    -webkit-backdrop-filter !important;
+  transition-duration: 0.35s !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Sedang scroll: matikan transisi `color` supaya perpindahan section
+   tetap instan dan sinkron dengan item menu. Atributnya dipasang
+   oleh JS dan otomatis dilepas 150ms setelah scroll berhenti, jadi
+   hover masuk/keluar tetap mulus seperti live. */
+.navbar[data-scrolling] .sh-btn-circle.d-lg-none {
+  transition-property: transform, opacity !important;
 }
 
 /* Transisi CSS halus untuk semua elemen navbar tanpa kelas Bootstrap kaku (kuroxsub.my.id style) */
@@ -2270,6 +2783,109 @@
 
 /* State 1: Paling Atas (Desktop: scroll <= 4.5rem) */
 @media (min-width: 992px) {
+
+  /* ------------------------------------------------------------
+     RESET STATE MENU MOBILE SAAT RESIZE KE DESKTOP.
+
+     Bug: kalau user membuka menu di tampilan mobile lalu
+     memperbesar window ke desktop, kelas `.menu-open` di
+     `.navbar` dan `.show` di `.navbar-collapse` MASIH ADA (Bootstrap
+     tidakmembersihkannya sendiri saat resize). Padahal aturan-aturan
+     yang memakainya—ada di LUAR media query, jadi tetap aktif di
+     desktop:
+
+       .menu-open .sh-btn-circle                    -> background: transparent
+       .menu-open .sh-btn-contact                  -> ::before opacity 0
+       .navbar:has(.navbar-collapse.show) .sh-btn-circle
+
+     Akibatnya tombol translate (`.sh-btn-circle lang-btn`) dan
+     "Hubungi Saya" di navbar desktop kehilangan:
+
+       - background-image  -> none (harusnya gradient split),
+       - backdrop-filter   -> none (harusnya blur(10px)).
+
+     Jadi bentuknya berubah diam-diam setelah resize, padahal
+     navbar desktopnya sendiri tidak error.
+
+     Perbaikannya di sini: kembalikan dua properti itu ke nilai
+     desktop. Selector-nya memakai `:is()` dengan state menu yang
+     masih tertinggal, jadi HANYA berlaku pada kondisi yang
+     bermasalah — navbar desktop yang normal tidak tersentuh.
+
+     Yang diperbaiki HANYA tombol translate & "Hubungi Saya".
+     Tombol collapse (`.d-lg-none`) tidak dirusak karena di desktop
+     ia `display: none` sama sekali.
+     ------------------------------------------------------------ */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-circle.lang-btn,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-contact {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+
+  /* Tombol translate: kembalikan gradient split-nya. Nilai ini
+     sama persis dengan yang ditulis di blok dasar
+     `.sh-btn-circle` / `.sh-btn-contact` (lihat "--pf-nav-split-bg"
+     di bagian atas file), jadi hasilnya identik dengan navbar
+     desktop yang tidak pernah tersentuh state mobile. */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-circle.lang-btn {
+    background: var(--pf-nav-split-bg) !important;
+  }
+
+  /* ------------------------------------------------------------
+     HOVER: KEMBALIKAN KE PERILAKU DESKTOP.
+
+     Bug lanjutan dari state mobile yang tertinggal: aturan
+     `.menu-open .sh-btn-circle::before` / `.menu-open
+     .sh-btn-contact::before` (lihat blok "Overlay hover
+     DIMATIKAN" di luar media query) memaksa `opacity: 0
+     !important`. Karena `.menu-open` masih ada setelah resize ke
+     desktop, overlay hover tombol translate dan "Hubungi Saya"
+     TIDAK PERNAH muncul — kursor di atas kedua tombol itu tidak
+     memberi umpan balik visual apa pun, padahal navbar desktop
+     normal memberi efek tukar-warna.
+
+     Perbaikannya: saat di-hover, opacity ::before dikembalikan
+     ke 1, persis seperti aturan dasar
+     `.sh-btn-circle:hover::before, .sh-btn-contact:hover::before`.
+
+     Selector memakai state menu yang tertinggal (`:is(...)`),
+     jadi aturan ini HANYA berlaku pada kondisi yang rusak.
+     Navbar desktop yang normal tidak tersentuh — hover-nya
+     tetap datang dari aturan dasar.
+
+     Efek hover yang kembali persis sama dengan desktop:
+       - background tombol  -> warna teks section (overlay ::before),
+       - warna teks/teks    -> warna background section
+                              (--pf-nav-hover-fg),
+       - teks tetap ter-split di garis batas section.
+
+     HANYA tombol translate (`.lang-btn`) dan "Hubungi Saya".
+     Tombol collapse tidak ikut karena di desktop `display: none`.
+     ------------------------------------------------------------ */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-circle.lang-btn:hover::before,
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-contact:hover::before {
+    opacity: 1 !important;
+  }
+
+  /* "Hubungi Saya" juga kehilangan gradient-nya lewat
+     `.menu-open .sh-btn-contact::before` (overlay hover) dan aturan
+     dasar; dikembalikan ke background split-nya. */
+  :is(.navbar.menu-open,
+    .navbar:has(.navbar-collapse.show),
+    .navbar:has(.navbar-collapse.collapsing)) .sh-btn-contact {
+    background: var(--pf-nav-split-bg) !important;
+  }
+
   .sh-nav-group-wrapper {
     display: flex !important;
     flex-direction: row !important;
@@ -2287,9 +2903,74 @@
     right: 0;
     bottom: 0;
     border-radius: 9999px;
-    /* Ikut warna teks item, supaya border hover-nya tetap terlihat saat
-       tint section terang (putih di atas putih = tidak kelihatan). */
-    border: 1px solid currentColor;
+
+    /* ------------------------------------------------------------
+       Border hover ikut ter-split di garis batas section, sama
+       persis seperti glif teks navbar.
+
+       Sebelumnya `border: 1px solid currentColor` — satu warna
+       polos untuk seluruh keliling pill, jadi saat garis batas
+       section melewati pill, bordernya tidak ikut terpotong
+       (tepatnya tidak, karena `color` cuma punya satu nilai).
+
+       `border-image` tidak bisa dipakai di sini: bentuknya selalu
+       bersudut siku sehingga `border-radius: 9999px` hilang.
+       Jadi gradient-nya dipaint sebagai `background`, lalu bagian
+       tengah MASIH dibuat tembus pandang dengan `mask`
+       (border-box MINUS padding-box = cincin setebal 1px).
+       Middle tetap kosong, jadi tidak ada yang tertutup dan tidak
+       ada elemen/garis border tambahan, cincin 1px yang sudah
+       ada tetap sama persis.
+
+        Warna came dari DUA isian solid yang terpisah, bukan satu
+       gambar gradient yang melintasi kedua warna:
+
+         lapisan 1 -> kotak penuh warna section DI ATAS
+                     (tinggi = --pf-split-y)
+         lapisan 2 -> kotak penuh warna section DI BAWAH
+                     (tinggi = sisa sampai tepi bawah)
+
+       Tiap lapisan hanya berisi SATU warna (dua stop dengan warna
+       yang sama = isian solid), jadi tidak mungkin ada isian yang
+       "mengandung" warna yang lain seperti yang terjadi bila
+       memakai satu gradient lalu memotongnya.
+
+       Kenapa tidak pakai pseudo-element anak (::after::before)
+       untuk isian kedua: Chrome MEMBUANG selektor bertumpuk seperti
+       itu - sudah diuji, aturannya tidak pernah masuk CSSOM.
+       background-color dan box-shadow: inset juga tidak bisa,
+       karena keduanya selalu mulai dari tepi kotak dan tidak bisa
+       berhenti tepat di --pf-split-y (box-shadow: inset juga tidak
+       menutup cincin 1px, sudah dicoba).
+
+       background-origin / background-clip sengaja border-box:
+       --pf-split-y diukur dari tepi border box, dan cincin 1px
+       berada di area border. Kalau memakai default padding-box,
+       isian bawahnya berhenti 1px terlalu atas dan warna atas
+       merembes sampai ke cincin paling bawah.
+
+       Warna diambil dari --pf-nav-tint-a / --pf-nav-tint-b - sama
+       persis dengan yang dipakai color teks navbar dan garis
+       hamburger. --pf-split-y yang dipakai adalah milik
+       .sh-nav-item, dihitung per permukaan oleh
+       getSplitSurfaces() di navigation.blade.php.
+
+       ------------------------------------------------------------ */
+    --pf-ring: 1px;
+    border: var(--pf-ring) solid transparent;
+    background-image: linear-gradient(var(--pf-nav-tint-a), var(--pf-nav-tint-a)),
+      linear-gradient(var(--pf-nav-tint-b), var(--pf-nav-tint-b));
+    background-origin: border-box, border-box;
+    background-clip: border-box, border-box;
+    background-repeat: no-repeat, no-repeat;
+    background-position: left top, left bottom;
+    background-size: 100% var(--pf-split-y), 100% calc(100% - var(--pf-split-y));
+    -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    -webkit-mask-clip: border-box, padding-box;
+    -webkit-mask-composite: xor;
+    mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    mask-clip: border-box, padding-box;
+    mask-composite: exclude;
     pointer-events: none;
     opacity: 0;
     -webkit-clip-path: inset(0 100% 0 0);
@@ -2297,6 +2978,14 @@
     box-sizing: border-box;
   }
 
+  /* Isian solid warna section DI BAWAH. Dipakai block terpisah supaya
+     batasnya benar-benar satu garis pada --pf-split-y, bukan sekadar
+     hard-stop di dalam satu gambar gradient.
+
+     CATATAN: selector `::after::before` untuk pseudo-element anak
+     TIDAK bisa dipakai - Chrome membuangnya (sudah diuji, aturan
+     tidak pernah masuk CSSOM). Karena itu isian kedua dibuat sebagai
+     lapisan background kedua, bukan pseudo-element anak. */
   .sh-nav-capsule .sh-nav-item:hover::after {
     opacity: 1;
     animation: shNavCapsuleHalfBorder 1.5s cubic-bezier(0.95, 0.75, 0.75, 0.95) forwards;
@@ -2394,9 +3083,8 @@
     padding: 1rem 1.5rem;
     font-size: 1rem;
   }
-}
 
-/* Tablet-ish desktop: 992px - 1199.98px.
+  /* Tablet-ish desktop: 992px - 1199.98px.
    Container Bootstrap di rentang ini cuma 960px (di >=1200px jadi 1140px), jadi
    capsule + tombol kanan tidak cukup ruang untuk ikon + label sekaligus.
    Kalau dipaksa, tiap item ter-shrink lalu label membungkus ke baris kedua dan
@@ -2405,7 +3093,6 @@
    saja - ikon Font Awesome disembunyikan. Padding, margin, gap, font-size, dan
    tinggi navbar tetap apa adanya; ikon kembali muncul di >=1200px dan di layout
    mobile (<=991.98px) yang memang sudah menampilkan ikon besar. */
-@media (min-width: 992px) {
   .sh-nav-capsule .sh-nav-item i {
     display: none;
   }
@@ -2490,16 +3177,40 @@ section.pf-fixed-background {
      @media (min-width:1048px){ background-attachment: fixed; }
    Masing-masing section menggunakan background image berurutan:
    img-1.jpg (section 1 / hero) sampai img-8.jpg (section 8 / kontak).
+
+   PENTING — `background-color` WAJIB ditulis di setiap section.
+
+   `--bs-body-bg` di atas #0d1117 (hitam). Section tanpa `background-color`
+   jadi transparan sampai `background-image` selesai diunduh, jadi browser
+   sempat mencetak LATAR HITAM dulu dan baru ganti terang begitu gambar
+   tiba — itulah kedip "page berkedip sekali" saat pertama buka.
+
+   Nilai warna di bawah = warna rata-rata tiap gambar. Section sudah tampil
+   dengan nada yang mendekati warna akhir SEBELUM gambarnya sampai, jadi yang
+   terlihat hanya tekstur foto yang muncul — bukan lompatan hitam ke terang.
+
+   ------------------------------------------------------------
+   KENAPA .jpg, BUKAN .webp
+   ------------------------------------------------------------
+   Gambar asli dipakai apa adanya (format .jpg). Yang mencegah kedip BUKAN
+   format gambar, tapi dua mekanisme di atas:
+
+     1. `background-color` rata-rata  -> tidak ada lompatan nada besar
+        antara "gambar belum siap" dan "gambar sudah tampil".
+     2. `preload` di <head>            -> request gambar jalan bareng
+        dengan CSS (lihat @push('head') di home.blade.php), bukan baru
+        setelah stylesheet selesai di-parse. Tanpa ini gambar selalu
+        mengunduh di belakang, padahal paint juga menunggu CSS.
+
+   Catatan jujur soal ukuran: img-1.jpg 762 KB, jadi di koneksi lambat
+   gambarnya tetap belum siap saat frame pertama dicetak. Itu secara fisik
+   tidak bisa dihindari selama ukuran file segitu. Yang bisa dijamin lewat
+   CSS hanya tiga: tidak ada kedip gelap, tidak ada layout shift, dan
+   perubahan nada antar frame sekecil mungkin karena warnanya dicocokkan.
    ------------------------------------------------------------ */
 
 .pf-fixed-background.hero {
   background-image: url("../images/img-1.jpg");
-}
-
-.hero::before,
-.hero::after {
-  content: none !important;
-  display: none !important;
 }
 
 .pf-fixed-background.pf-section-skills {
@@ -2528,6 +3239,12 @@ section.pf-fixed-background {
 
 .pf-fixed-background.pf-section-kontak {
   background-image: url("../images/img-8.jpg");
+}
+
+.hero::before,
+.hero::after {
+  content: none !important;
+  display: none !important;
 }
 
 /* ------------------------------------------------------------
@@ -2578,12 +3295,11 @@ section.pf-fixed-background {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
-@media only screen and (min-width: 1048px) {
 
-  .pf-fixed-background {
-    background-attachment: fixed;
-  }
+.pf-fixed-background {
+  background-attachment: fixed;
 }
+
 
 /* Hero punya aturan min-height/height sendiri + trik offset navbar
    (--pf-navbar-h). Samakan supaya tetap mulai di y=0 dan setinggi
@@ -2612,6 +3328,101 @@ section.pf-fixed-background {
   padding-bottom: max(0px, calc(12vh - var(--pf-navbar-h)));
 }
 
+@media only screen and (max-width: 1199.98px) {
+
+  .avatar-frame-container,
+  .avatar-frame-container .avatar-img {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+@media only screen and (max-width: 991.98px) {
+
+  .avatar-frame-container,
+  .avatar-frame-container .avatar-img {
+    width: 320px;
+    height: 320px;
+  }
+}
+
+/* ============================================================
+   MOBILE (<= 991.98px): FOTO PROFIL MENJADI BACKGROUND SECTION 1
+   ============================================================
+   Foto profil berbingkai (`.avatar-frame-container`) dihapus.
+   `profile.jpg` meng-cover background section 1 murni.
+   Pembungkus (.hero-content-wrapper) melapisi seluruh section
+   dengan background: rgba(255, 255, 255, 0.7) (transparansi putih 70%)
+   seperti project rsudmerdekabintaro, tanpa background-image linear-gradient.
+
+   DESKTOP (>= 992px) TIDAK DISENTUH:
+   Aturan hanya berlaku di dalam media query max-width 991.98px.
+   ============================================================ */
+@media only screen and (max-width: 991.98px) {
+
+  /* Dua lapis background, ditulis URUTAN dari paling depan:
+
+     Lapisan 1 = `profile.jpg`, nempel di tepi BAWAH dan melebar ke atas.
+       `100% auto` = lebar 100% section, tinggi ikut aspect ratio sendiri
+       (profile.jpg bujur sangkar 1080x1080 -> tinggi = lebar section).
+       Jadi saat user resize browser, foto tetap full width, tidak pernah
+       di-crop, dan tidak pernah bergeser.
+
+     Lapisan 2 = gradien RADIAL yang pusatnya pas di TEPI ATAS foto.
+       Lapisannya di belakang foto, jadi bagian atas section yang tidak
+       tertutup foto otomatis menampilkan gradien ini.
+
+       `at 50% calc(100% - 100vw)`:
+         - `50%`           -> tengah horizontal (tengah page)
+         - `calc(100% - 100vw)` -> tinggi section dikurangi tinggi foto,
+         jadi titik PUSAT gradien jatuh persis di garis tepi atas foto.
+
+       `ellipse 50% 50%` -> radius horizontal 50% dari lebar section,
+       jadi warna paling belakang = `#9D9C98` jatuh tepat di tepi kiri
+       dan tepi kanan page.
+       Warna di pusat = `#C2BFB8` (terang) supaya nyambung mulus dengan
+       tepi atas foto yang memang terang.
+
+     Kalau pakai `cover`, foto ikut meninggi saat jendela dipanjang
+     sehingga wajah ikut bergeser ke tengah section. */
+  .hero.pf-fixed-background {
+    background-image:
+      url("../images/profile.jpg"),
+      radial-gradient(ellipse 50% 50% at 50% calc(100% - 100vw),
+        #000,
+        #9A9A98,
+        #A3A3A1,
+        #AAABA6,
+        #B0AFAB,
+        #B9B8B4,
+        #C0BFBD,
+        #C1C0BB,
+        #C4C4BC,
+        #C6C6BC,
+        #C8C5BC,
+        #C1BEB5,
+        #000);
+
+    background-size: 100% auto;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .hero .hero-content-wrapper {
+    /* background: rgba(255, 255, 255, 0.7); */
+    padding-top: var(--pf-navbar-h);
+    padding-bottom: max(0px, calc(12vh - var(--pf-navbar-h)));
+    align-items: flex-end !important;
+  }
+
+  /* Foto profil berbingkai dihapus di state mobile ini. */
+  .hero .hero-avatar-col {
+    display: none;
+  }
+}
+
 /* Bingkai avatar dekoratif (`.avatar-frame-overlay`) keluar ~311% dari
    tinggi avatar, jadi di HP (avatar 320px) bingkai menjulur >500px dan
    TERPOTONG tepi section karena `overflow: hidden`. Di layar kecil
@@ -2619,8 +3430,8 @@ section.pf-fixed-background {
    seluruhnya muat di dalam section. */
 @media only screen and (max-width: 767px) {
 
-  .hero .avatar-frame-container,
-  .hero .avatar-frame-container .avatar-img {
+  .avatar-frame-container,
+  .avatar-frame-container .avatar-img {
     width: 230px;
     height: 230px;
   }
@@ -2630,7 +3441,7 @@ section.pf-fixed-background {
      persis sama seperti di desktop — hanya skala 전체nya yang mengecil.
      Dengan avatar 230px, bingkai menjulur 186px di bawah container,
      jadi butuh margin-bottom ~190px agar tidak terpotong. */
-  .hero .hero-avatar-col {
+  .hero-avatar-col {
     margin-bottom: 190px;
   }
 }

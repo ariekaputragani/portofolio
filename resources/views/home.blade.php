@@ -92,7 +92,7 @@
 											Lihat Proyek <i class="fa-solid fa-arrow-right"></i>
 										</a>
 										<a href="{{ route('kontak') }}"
-											class="btn btn-outline-secondary btn-lg rounded-pill d-inline-flex align-items-center gap-2"
+											class="btn btn-outline-hero btn-lg rounded-pill d-inline-flex align-items-center gap-2"
 											data-t="hero.cta_kontak">
 											<i class="fa-regular fa-envelope"></i> Hubungi Saya
 										</a>

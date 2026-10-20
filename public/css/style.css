@@ -191,7 +191,8 @@ footer,
 .btn-xl {
 	--bs-btn-padding-y: 0.75rem;
 	--bs-btn-padding-x: 6rem;
-	--bs-btn-font-size: 1.75rem;
+	/* +1px (+0.0625rem) dari 1.75rem -> 1.8125rem */
+	--bs-btn-font-size: 1.8125rem;
 	--bs-btn-border-radius: var(--bs-border-radius-xl);
 }
 

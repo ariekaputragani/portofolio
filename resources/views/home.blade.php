@@ -81,7 +81,7 @@
 									menimpa isinya dengan kalimat generic jika ada.
 									Nama pengarang ditulis di sini dengan <br> agar semantik
 									kutipan tetap utuh dalam satu elemen <p>. --}}
-									<p class="text-secondary mb-4" style="max-width: 34rem; margin-inline: auto;">
+									<p class="text-secondary mb-4">
 										{{ is_array($site['hero']['intro']) ? ($site['hero']['intro'][2] ?? $site['hero']['intro'][0]) : $site['hero']['intro'] }}<br>
 										-{{ config('portfolio.name') }}
 									</p>
@@ -538,4 +538,41 @@
 			</div>
 		</div>
 	</section>
+
+	{{-- -------------------------------------------------------------
+	Matikan transisi tombol hero selama jendela di-resize.
+
+	`.btn-outline-hero` (tombol "Hubungi Saya") warnanya berubah
+	saat jendela melewati breakpoint 991.98px, karena media query
+	mobile di portfolio.css meng-override variabel warnanya ke
+	#231937. Kalau transisi `color` / `border-color` bawaan
+	Bootstrap ikut jalan, perubahan itu jadi beranimasi — padahal
+	bukan hover, dan durasi 0.15s-nya praktis tak terlihat karena
+	layout sedang reflow.
+
+	Atribut `data-resizing` dipasang selama resize benar-benar
+	terjadi dan dilepas RESIZE_IDLE_MS (150ms) setelah resize
+	berhenti, sehingga transisi kembali hidup dan hover tetap
+	mulus dua arah seperti tombol Bootstrap 5 biasa.
+
+	Pasangannya di CSS: `.hero .btn-outline-hero[data-resizing]`
+	di public/css/portfolio.css.
+	------------------------------------------------------------- --}}
+	<script>
+		(function () {
+			var BTN = document.querySelector(".hero .btn-outline-hero");
+			if (!BTN) return;
+
+			var RESIZE_IDLE_MS = 150;
+			var idleTimer = null;
+
+			window.addEventListener("resize", function () {
+				BTN.setAttribute("data-resizing", "1");
+				clearTimeout(idleTimer);
+				idleTimer = setTimeout(function () {
+					BTN.removeAttribute("data-resizing");
+				}, RESIZE_IDLE_MS);
+			}, { passive: true });
+		})();
+	</script>
 @endsection

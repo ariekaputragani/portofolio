@@ -139,12 +139,10 @@
 
   // Elemen targetnya ada di hero, jauh sebelum script terakhir ini
   // dieksekusi - jadi langsung jalan, tidak perlu menunggu.
-  // Fallback ke DOMContentLoaded hanya kalau ternyata belum ada.
-  if (document.querySelector(".typing-name, .typing-role")) {
+  // Fallback ke ready hanya kalau ternyata belum ada.
+  if ($(".typing-name, .typing-role").length) {
     initTypewriters();
-  } else if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initTypewriters);
   } else {
-    initTypewriters();
+    $(initTypewriters);
   }
 })(jQuery);

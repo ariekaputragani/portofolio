@@ -28,7 +28,7 @@
         if ("IntersectionObserver" in window) {
             var observer = new IntersectionObserver(
                 function (entries) {
-                    entries.forEach(function (entry) {
+                    $.each(entries, function (_, entry) {
                         var $target = $(entry.target);
                         if (entry.isIntersecting) {
                             reveal($target);
@@ -64,7 +64,7 @@
                         }
                     });
                 });
-                mutationObserver.observe(document.body, { childList: true, subtree: true });
+                mutationObserver.observe($("body")[0], { childList: true, subtree: true });
             }
 
             $(window).on("beforeunload", function () {

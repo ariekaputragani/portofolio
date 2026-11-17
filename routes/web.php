@@ -1,24 +1,12 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', Controllers\HomeController::class);
 
-Route::view('tentang', 'tentang')->name('tentang');
+Route::get('/projects', [Controllers\ProjectController::class, 'index']);
+Route::get('/projects/{slug}', [Controllers\ProjectController::class, 'index']);
 
-Route::get('layanan', [PortfolioController::class, 'services'])->name('layanan');
-Route::redirect('benefit', 'layanan')->name('benefit');
-
-Route::get('proyek', [PortfolioController::class, 'projects'])->name('proyek');
-Route::get('proyek/{slug}', [PortfolioController::class, 'projectShow'])->name('proyek.show');
-
-Route::get('blog', [PortfolioController::class, 'blog'])->name('blog');
-Route::get('blog/{slug}', [PortfolioController::class, 'blogShow'])->name('blog.show');
-
-Route::get('kontak', [PortfolioController::class, 'contact'])->name('kontak');
-Route::post('messages/store', [MessageController::class, 'store'])
-    ->middleware('throttle:5,1')
-    ->name('messages.store');
+Route::get('/blog', [Controllers\BlogController::class, 'index']);
+Route::get('/blog/{slug}', [Controllers\BlogController::class, 'index']);

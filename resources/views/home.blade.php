@@ -1,5 +1,3 @@
-@extends('layouts.app', ['title' => ''])
-
 @php
 	$site = config('portfolio');
 	$slideImages = ['gambar1.jpg', 'gambar2.jpg', 'gambar3.jpg', 'gambar4.jpg'];
@@ -7,6 +5,7 @@
 	$totalTech = collect($pipeline)->reduce(fn($c, $g) => $c + count($g), 0);
 	$bigSins = $site['big_sins'] ?? [];
 	$journey = $site['journey'] ?? [];
+	$services = $site['services'] ?? [];
 @endphp
 
 @push('head')
@@ -20,12 +19,13 @@
 	<link rel="preload" as="image" href="{{ asset('images/img-8.jpg') }}" fetchpriority="high">
 @endpush
 
-@section('content')
-	<section class="pf-fixed-background hero">
+<x-app-layout>
+	<section id="home" class="pf-fixed-background" data-type="slider-item">
 		<div class="hero-content-wrapper w-100 flex-grow-1 d-flex align-items-center">
 			<div class="container">
 				<div class="row align-items-center gy-5">
-					<div class="col-xl-7 col-lg-8 text-center d-flex flex-column align-items-center justify-content-center">
+					<div
+						class="col-xl-7 col-lg-8 text-center d-flex flex-column align-items-center justify-content-center">
 						<p class="hero-eyebrow" data-t="hero.halo">Saya</p>
 						<h1 class="hero-title mb-3">
 							<span class="text-gradient typing-name"
@@ -57,19 +57,7 @@
 
 										Kalau JS dimatikan, script ini tidak pernah jalan,
 										kelas tidak pernah dipasang, dan nama tetap tampil utuh. --}}
-										<script>
-											(function () {
-												var script = document.currentScript;
-												var el = script && script.previousElementSibling;
-												if (!el || !el.classList.contains("typing-name")) return;
-												el.classList.add("typing-name-pending");
-												// Jaring pengaman: kalau typewriter.js gagal dimuat,
-												// jangan sampai nama hilang permanen.
-												setTimeout(function () {
-													el.classList.remove("typing-name-pending");
-												}, 3000);
-											})();
-										</script>
+										<script src="{{ asset('js/typewriter-anticipation.js') }}"></script>
 									</h1>
 									<p class="hero-role mb-3">
 										<span
@@ -86,15 +74,15 @@
 										-{{ config('portfolio.name') }}
 									</p>
 									<div class="d-flex flex-wrap justify-content-center gap-3">
-										<a href="{{ route('proyek') }}"
-											class="btn project-btn btn-lg rounded-pill d-inline-flex align-items-center gap-2"
+										<a href="#projects"
+											class="btn project-btn btn-lg rounded-pill d-inline-flex align-items-center gap-2 smoothScroll"
 											data-t="hero.cta_proyek">
 											Lihat Proyek <i class="fa-solid fa-arrow-right"></i>
 										</a>
-										<a href="{{ route('kontak') }}"
+										<a href="{{ url('#contact') }}"
 											class="btn btn-outline-hero btn-lg rounded-pill d-inline-flex align-items-center gap-2"
-											data-t="hero.cta_kontak">
-											<i class="fa-regular fa-envelope"></i> Hubungi Saya
+											data-t="hero.cta_downcv">
+											<i class="fa-regular fa-file-lines"></i> Unduh CV
 										</a>
 									</div>
 					</div>
@@ -113,7 +101,7 @@
 		</div>
 	</section>
 
-	<section class="pf-fixed-background pf-scope pf-section-skills">
+	<section id="about" class="pf-fixed-background pf-scope pf-section-skills" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="row g-4 align-items-center">
 				<div class="col-lg-5">
@@ -135,8 +123,8 @@
 							</li>
 						@endforeach
 					</ul>
-					<a href="{{ route('tentang') }}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
-						data-t="about.cta">
+					<a href="{{ url('#journey') }}"
+						class="btn btn-outline-primary d-inline-flex align-items-center gap-2" data-t="about.cta">
 						Selengkapnya <i class="fa-solid fa-arrow-right"></i>
 					</a>
 
@@ -162,7 +150,7 @@
 				<div class="col-lg-7">
 					{{-- Tech Pipeline marquee — markup tp-* tidak boleh diubah karena
 					animasinya bergantung pada struktur ini --}}
-					<div class="tp-section pf-tp-inline">
+					<div id="stack" class="tp-section pf-tp-inline">
 						<div class="tp-shell">
 							<div class="tp-header">
 								<div class="tp-header-left">
@@ -176,7 +164,8 @@
 										<h3 class="tp-title">Tech <span class="tp-title-gradient"
 												data-t="tech.title_2">Pipeline</span>
 										</h3>
-										<p class="tp-subtitle"><span data-t="tech.active">Active</span> • {{ $totalTech }}
+										<p class="tp-subtitle"><span data-t="tech.active">Active</span> •
+											{{ $totalTech }}
 										</p>
 									</div>
 								</div>
@@ -230,7 +219,8 @@
 								<div class="tp-divider"></div>
 								<div class="tp-footer-item">
 									<div class="tp-dot tp-dot-blue"></div>
-									<span class="tp-footer-text">{{ $totalTech }} <span data-t="tech.flowing">Technologies
+									<span class="tp-footer-text">{{ $totalTech }} <span
+											data-t="tech.flowing">Technologies
 											Flowing</span></span>
 								</div>
 								<div class="tp-divider"></div>
@@ -251,7 +241,7 @@
 	Tiga pilar: Blog Publikasi / Layanan / Edukasi — diadaptasi dari
 	struktur "TRI DHARMA" (Education / Research & Publications / Service)
 	di https://www.res.my.id/ --}}
-	<section class="pf-fixed-background pf-scope pf-section-bigsins">
+	<section class="pf-fixed-background pf-scope pf-section-bigsins" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="text-center mb-4">
 				<p class="section-eyebrow mb-2" data-t="bigsins.eyebrow">Tiga Pilar</p>
@@ -287,7 +277,7 @@
 	</section>
 
 	{{-- ============ SECTION 4/8 — JOURNEY ============ --}}
-	<section class="pf-fixed-background pf-scope pf-section-journey">
+	<section id="journey" class="pf-fixed-background pf-scope pf-section-journey" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="text-center mb-4">
 				<p class="section-eyebrow mb-2" data-t="journey.eyebrow">Perjalanan</p>
@@ -311,8 +301,8 @@
 		</div>
 	</section>
 
-	{{-- ============ SECTION 5/8 — LAYANAN ============ --}}
-	<section id="layanan-section" class="pf-fixed-background pf-scope pf-section-layanan">
+	{{-- ============ SECTION 5/8 — SERVICES ============ --}}
+	<section id="services-section" class="pf-fixed-background pf-scope pf-section-services" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="hero-card-frame p-4 p-lg-5 sr-reveal">
 				<div class="text-center mb-4">
@@ -338,7 +328,7 @@
 					@endforeach
 				</div>
 				<div class="text-center mt-4">
-					<a href="{{ route('layanan') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
+					<a href="#contact" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
 						data-t="layanan.cta">
 						Semua Layanan <i class="fa-solid fa-arrow-right"></i>
 					</a>
@@ -348,7 +338,7 @@
 	</section>
 
 	{{-- ============ SECTION 6/8 — PROYEK ============ --}}
-	<section id="proyek-section" class="pf-fixed-background pf-scope pf-project">
+	<section id="projects" class="pf-fixed-background pf-scope pf-project" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="hero-card-frame p-4 p-lg-5 sr-reveal">
 				<div class="text-center mb-3">
@@ -366,14 +356,15 @@
 							<div class="card card-hover h-100 w-100 border-0 overflow-hidden d-flex flex-column">
 								<div class="card-img-wrapper" style="height: 96px; background: rgba(0,0,0,0.3);">
 									<img src="{{ asset(ltrim($project['image'], '/')) }}" alt="{{ $project['title'] }}"
-										class="w-100 h-100 object-fit-cover" style="width:100%;height:100%;object-fit:cover;">
+										class="w-100 h-100 object-fit-cover"
+										style="width:100%;height:100%;object-fit:cover;">
 								</div>
 								<div class="card-body p-4 d-flex flex-column flex-grow-1">
 									<p class="card-text text-secondary small mb-2">
 										<i class="fa-solid fa-code me-2 text-primary"></i>{{ $project['subtitle'] }}
 									</p>
 									<h4 class="card-title fw-bold mb-2">
-										<a href="{{ route('proyek.show', $project['slug']) }}"
+										<a href="{{ url('/projects/' . $project['slug']) }}"
 											class="text-white text-decoration-none">
 											{{ $project['title'] }}
 										</a>
@@ -387,7 +378,7 @@
 												<span class="chip me-1 mb-1">{{ $tech }}</span>
 											@endforeach
 										</div>
-										<a href="{{ route('proyek.show', $project['slug']) }}"
+										<a href="{{ url('/projects/' . $project['slug']) }}"
 											class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-2 w-100 justify-content-center">
 											Detail Proyek <i class="fa-solid fa-arrow-right"></i>
 										</a>
@@ -398,7 +389,7 @@
 					@endforeach
 				</div>
 				<div class="text-center mt-2">
-					<a href="{{ route('proyek') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
+					<a href="#projects" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
 						data-t="proyek.cta">
 						Semua Proyek <i class="fa-solid fa-arrow-right"></i>
 					</a>
@@ -408,7 +399,7 @@
 	</section>
 
 	{{-- ============ SECTION 7/8 — BLOG PUBLIKASI ============ --}}
-	<section id="blog-section" class="pf-fixed-background pf-scope pf-section-blog">
+	<section id="blog-section" class="pf-fixed-background pf-scope pf-section-blog" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="hero-card-frame p-4 p-lg-5 sr-reveal">
 				<div class="text-center mb-3">
@@ -438,7 +429,7 @@
 								</div>
 								<div class="card-body p-4 d-flex flex-column flex-grow-1">
 									<h4 class="card-title fw-bold mb-2">
-										<a href="{{ route('blog.show', $post['slug']) }}"
+										<a href="{{ url('/blog/' . $post['slug']) }}"
 											class="text-white text-decoration-none">
 											{{ $post['title'] }}
 										</a>
@@ -452,7 +443,7 @@
 												<span class="chip me-1 mb-1">{{ $tag }}</span>
 											@endforeach
 										</div>
-										<a href="{{ route('blog.show', $post['slug']) }}"
+										<a href="{{ url('/blog/' . $post['slug']) }}"
 											class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-2 w-100 justify-content-center"
 											data-t="blog.baca">
 											Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i>
@@ -464,7 +455,7 @@
 					@endforeach
 				</div>
 				<div class="text-center mt-3">
-					<a href="{{ route('blog') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
+					<a href="{{ url('/blog') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2"
 						data-t="blog.semua">
 						Semua Artikel <i class="fa-solid fa-arrow-right"></i>
 					</a>
@@ -473,8 +464,8 @@
 		</div>
 	</section>
 
-	{{-- ============ SECTION 8/8 — KONTAK (terakhir, sebelum footer) ============ --}}
-	<section id="book-online" class="pf-fixed-background pf-scope pf-section-kontak">
+	{{-- ============ SECTION 8/8 — CONTACT (terakhir, sebelum footer) ============ --}}
+	<section id="contact" class="pf-fixed-background pf-scope pf-section-contact" data-type="slider-item">
 		<div class="container pf-section-inner">
 			<div class="hero-card-frame p-4 p-lg-5">
 				<div class="text-center mb-4">
@@ -487,7 +478,7 @@
 						<img src="{{ asset('images/appointment.png') }}" alt="" class="img-fluid pf-contact-img">
 					</div>
 					<div class="col-lg-7">
-						<form action="{{ route('messages.store') }}" method="post" novalidate>
+						<form action="#" method="post" novalidate>
 							@csrf
 							<div class="mb-3">
 								<label for="name" class="form-label" data-t="kontak.nama">Nama</label>
@@ -539,40 +530,19 @@
 		</div>
 	</section>
 
-	{{-- -------------------------------------------------------------
-	Matikan transisi tombol hero selama jendela di-resize.
-
-	`.btn-outline-hero` (tombol "Hubungi Saya") warnanya berubah
-	saat jendela melewati breakpoint 991.98px, karena media query
-	mobile di portfolio.css meng-override variabel warnanya ke
-	#231937. Kalau transisi `color` / `border-color` bawaan
-	Bootstrap ikut jalan, perubahan itu jadi beranimasi — padahal
-	bukan hover, dan durasi 0.15s-nya praktis tak terlihat karena
-	layout sedang reflow.
-
-	Atribut `data-resizing` dipasang selama resize benar-benar
-	terjadi dan dilepas RESIZE_IDLE_MS (150ms) setelah resize
-	berhenti, sehingga transisi kembali hidup dan hover tetap
-	mulus dua arah seperti tombol Bootstrap 5 biasa.
-
-	Pasangannya di CSS: `.hero .btn-outline-hero[data-resizing]`
-	di public/css/portfolio.css.
-	------------------------------------------------------------- --}}
-	<script>
-		(function () {
-			var BTN = document.querySelector(".hero .btn-outline-hero");
-			if (!BTN) return;
-
-			var RESIZE_IDLE_MS = 150;
-			var idleTimer = null;
-
-			window.addEventListener("resize", function () {
-				BTN.setAttribute("data-resizing", "1");
-				clearTimeout(idleTimer);
-				idleTimer = setTimeout(function () {
-					BTN.removeAttribute("data-resizing");
-				}, RESIZE_IDLE_MS);
-			}, { passive: true });
-		})();
-	</script>
-@endsection
+	{{-- ============ VERTICAL NAVBAR ARROWS (Fixed Background Slider Navigation) ============ --}}
+	<nav>
+		<ul class="cd-vertical-nav">
+			<li>
+				<a href="#0" class="cd-prev inactive">
+					<i class="fa-solid fa-chevron-up"></i>
+				</a>
+			</li>
+			<li>
+				<a href="#0" class="cd-next">
+					<i class="fa-solid fa-chevron-down"></i>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</x-app-layout>

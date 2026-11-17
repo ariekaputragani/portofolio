@@ -1,10 +1,8 @@
-@extends('layouts.app', ['title' => $post['title'] . ' - '])
-
-@section('content')
+<x-app-layout :title="$post['title'] . ' - '">
 <div class="pf-scope pf-hero-bg pf-fixed-background py-5">
     <div class="container py-4">
         <div class="hero-card-frame p-4 p-lg-5">
-            <a href="{{ route('blog') }}" class="btn btn-outline-secondary btn-sm rounded-pill mb-4 d-inline-flex align-items-center gap-2" data-t="blog.baca">
+            <a href="{{ url('/blog') }}" class="btn btn-outline-secondary btn-sm rounded-pill mb-4 d-inline-flex align-items-center gap-2" data-t="blog.baca">
                 <i class="fa-solid fa-arrow-left"></i> Kembali ke blog
             </a>
             
@@ -31,11 +29,11 @@
             </div>
 
             <div>
-                <a href="{{ route('blog') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2" data-t="blog.semua">
+                <a href="{{ url('/blog') }}" class="btn book-btn btn-lg d-inline-flex align-items-center gap-2" data-t="blog.semua">
                     <i class="fa-solid fa-arrow-left"></i> Semua Artikel
                 </a>
             </div>
         </div>
     </div>
 </div>
-@endsection
+</x-app-layout>

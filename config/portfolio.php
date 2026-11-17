@@ -55,14 +55,6 @@ return [
         'twitter' => env('PORTFOLIO_TWITTER', 'https://twitter.com/username'),
         'instagram' => env('PORTFOLIO_INSTAGRAM', 'https://instagram.com/arieka622'),
     ],
-    'nav' => [
-        ['label' => 'Beranda', 'href' => '/', 'icon' => 'fa-solid fa-house'],
-        ['label' => 'Tentang', 'href' => '/tentang', 'icon' => 'fa-solid fa-user'],
-        ['label' => 'Layanan', 'href' => '/layanan', 'icon' => 'fa-solid fa-cubes'],
-        ['label' => 'Proyek', 'href' => '/proyek', 'icon' => 'fa-solid fa-code'],
-        ['label' => 'Blog', 'href' => '/blog', 'icon' => 'fa-solid fa-newspaper'],
-        ['label' => 'Kontak', 'href' => '/kontak', 'icon' => 'fa-solid fa-envelope'],
-    ],
     'highlights' => [
         'Pengalaman 3+ tahun di bidang pengembangan web',
         'Menguasai Laravel, PHP, dan ekosistem JavaScript',
@@ -245,16 +237,16 @@ return [
     ],
     'translations' => [
         'en' => [
-            'nav.beranda' => 'Home',
-            'nav.tentang' => 'About',
+            'nav.beranda' => 'Homepage',
+            'nav.tentang' => 'About Me',
             'nav.proyek' => 'Projects',
-            'nav.layanan' => 'Services',
+            'nav.perjalanan' => 'Journey',
+            'nav.stack' => 'Stack',
             'nav.blog' => 'Blog',
-            'nav.kontak' => 'Contact',
             'nav.hubungi' => 'Contact Me',
             'nav.login' => 'Login',
             'hero.halo' => 'I am',
-            'hero.role_prefix' => 'a',
+            'hero.role_prefix' => 'A',
             'hero.role' => 'Full-stack Web Developer',
             // 'hero.intro' SENGAJA TIDAK ADA.
             // Isi hero sudah diganti motto acak (config('portfolio.hero.intro'),
@@ -263,7 +255,7 @@ return [
             // masih punya data-t="hero.intro", translate.js akan menimpa motto
             // dengan kalimat generic ini begitu DOMContentLoaded.
             'hero.cta_proyek' => 'View Projects',
-            'hero.cta_kontak' => 'Contact Me',
+            'hero.cta_downcv' => 'Download CV',
             'carousel.proyek' => 'My Projects',
             'carousel.subtitle' => 'A selection of projects I have built.',
             'about.eyebrow' => 'About Me',

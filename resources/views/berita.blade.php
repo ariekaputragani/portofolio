@@ -1,6 +1,4 @@
-@extends('layouts.app', ['title' => 'Blog - '])
-
-@section('content')
+<x-app-layout title="Blog - ">
 <div class="pf-scope pf-hero-bg pf-fixed-background py-5">
     <div class="container py-4">
         <div class="hero-card-frame p-4 p-lg-5">
@@ -24,7 +22,7 @@
                                     @endforeach
                                 </div>
                                 <h3 class="card-title fw-bold mb-3">
-                                    <a href="{{ route('blog.show', $post['slug']) }}" class="text-white text-decoration-none">
+                                    <a href="{{ url('/blog/' . $post['slug']) }}" class="text-white text-decoration-none">
                                         {{ $post['title'] }}
                                     </a>
                                 </h3>
@@ -32,7 +30,7 @@
                                     {{ Str::limit($post['excerpt'], 200) }}
                                 </p>
                                 <div>
-                                    <a href="{{ route('blog.show', $post['slug']) }}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2" data-t="blog.baca">
+                                    <a href="{{ url('/blog/' . $post['slug']) }}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2" data-t="blog.baca">
                                         Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -53,7 +51,7 @@
                                 $tags = $posts->flatMap(fn ($p) => $p['tags'])->unique();
                             @endphp
                             @foreach($tags as $tag)
-                                <a href="{{ route('blog') }}" class="chip text-decoration-none me-1 mb-1">
+                                <a href="{{ url('/blog') }}" class="chip text-decoration-none me-1 mb-1">
                                     <i class="fa-solid fa-tag me-1 text-primary"></i>{{ $tag }}
                                 </a>
                             @endforeach
@@ -64,4 +62,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-app-layout>

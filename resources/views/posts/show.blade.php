@@ -1,6 +1,4 @@
-@extends('layouts.app', ['title' => $post->title . ' - '])
-
-@section('content')
+<x-app-layout :title="$post->title . ' - '">
 <div class="lamcn app-serif pf-fixed-background">
     <section id="ads">
         <div class="container p-5">
@@ -100,4 +98,4 @@
         </div>
     </section>
 </div>
-@endsection
+</x-app-layout>

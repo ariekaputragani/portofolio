@@ -1,10 +1,8 @@
-@extends('layouts.app', ['title' => $project['title'] . ' - '])
-
-@section('content')
+<x-app-layout :title="$project['title'] . ' - '">
 <div class="pf-scope pf-hero-bg pf-fixed-background py-5">
     <div class="container py-4">
         <div class="hero-card-frame p-4 p-lg-5">
-            <a href="{{ route('proyek') }}" class="btn btn-outline-secondary btn-sm rounded-pill mb-4 d-inline-flex align-items-center gap-2" data-t="proyek.kembali">
+            <a href="{{ url('/projects') }}" class="btn btn-outline-secondary btn-sm rounded-pill mb-4 d-inline-flex align-items-center gap-2" data-t="proyek.kembali">
                 <i class="fa-solid fa-arrow-left"></i> Kembali ke proyek
             </a>
             <div class="row gy-4">
@@ -58,4 +56,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-app-layout>
